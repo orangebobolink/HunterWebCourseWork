@@ -14,7 +14,7 @@ namespace DAL.Repositories
 
         public abstract Task<IEnumerable<T>> GetAll();
 
-        public abstract Task<T> GetById(int id);
+        public abstract Task<T?> GetById(int id);
 
         public void Add(T item)
             => _dbContext.Add(item);
