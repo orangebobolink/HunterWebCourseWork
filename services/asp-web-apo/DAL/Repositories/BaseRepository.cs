@@ -3,7 +3,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public abstract class BaseRepository<T> : IRepository<T> where T : class
+    internal abstract class BaseRepository<T> : IRepository<T> where T : class
     {
         protected readonly ApplicationContext _dbContext;
 
