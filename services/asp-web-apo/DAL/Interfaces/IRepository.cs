@@ -1,13 +1,13 @@
 ﻿namespace DAL.Interfaces
 {
-    public interface IRepository<T> : IDisposable
+    public interface IRepository<T>
         where T : class
     {
         public Task<IEnumerable<T>> GetAll();
         public Task<T> GetById(int id);
-        public Task AddAsync(T item);
-        public Task Update(T item);
-        public Task Remove(int id);
+        public void Add(T item);
+        public void Update(T item);
+        public void Remove(T item);
         public Task SaveChangesAsync();
     }
 }
