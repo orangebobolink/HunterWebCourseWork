@@ -24,7 +24,6 @@ namespace DAL.Repositories.UserRepository
 
         public async override Task<User?> GetById(int id)
             => await _dbContext.Users
-
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
 
