@@ -4,7 +4,6 @@ namespace DAL.Entities.UserEntities
 {
     public class User
     {
-        // TODO: дописать
         public int Id { get; set; }
         [Required]
         public string Email { get; set; } = string.Empty;
