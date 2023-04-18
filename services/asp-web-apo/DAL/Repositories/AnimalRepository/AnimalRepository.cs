@@ -32,5 +32,10 @@ namespace DAL.Repositories.AnimalRepository
             .Include(a => a.AnimalDetail)
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
+
+        public async Task<Animal?> GetByName(string name)
+            => await _dbContext.Animals
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Name == name);
     }
 }
