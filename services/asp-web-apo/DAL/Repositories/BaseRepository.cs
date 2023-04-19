@@ -12,9 +12,9 @@ namespace DAL.Repositories
             _dbContext = dbContext;
         }
 
-        public abstract Task<IEnumerable<T>> GetAll();
+        public abstract Task<IEnumerable<T>> GetAllAsync();
 
-        public abstract Task<T?> GetById(int id);
+        public abstract Task<T?> GetByIdAsync(int id);
 
         public void Add(T item)
             => _dbContext.Add(item);

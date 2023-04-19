@@ -10,14 +10,14 @@ namespace DAL.Repositories.OrderRepository
         {
         }
 
-        public async override Task<IEnumerable<Order>> GetAll()
+        public async override Task<IEnumerable<Order>> GetAllAsync()
             => await _dbContext.Orders
                 .Include(o => o.User)
                 .Include(o => o.Messanger)
                 .AsNoTracking()
                 .ToListAsync();
 
-        public async override Task<Order?> GetById(int id)
+        public async override Task<Order?> GetByIdAsync(int id)
             => await _dbContext.Orders
                 .Include(o => o.User)
                 .Include(o => o.Messanger)

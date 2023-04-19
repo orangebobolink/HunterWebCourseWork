@@ -10,12 +10,12 @@ namespace DAL.Repositories.MessangerRepository
         {
         }
 
-        public async override Task<IEnumerable<Messanger>> GetAll()
+        public async override Task<IEnumerable<Messanger>> GetAllAsync()
             => await _dbContext.Messangers
                 .AsNoTracking()
                 .ToListAsync();
 
-        public async override Task<Messanger?> GetById(int id)
+        public async override Task<Messanger?> GetByIdAsync(int id)
             => await _dbContext.Messangers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);

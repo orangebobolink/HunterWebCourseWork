@@ -11,7 +11,7 @@ namespace DAL.Repositories.AnimalRepository
         {
         }
 
-        public async override Task<IEnumerable<Animal>> GetAll()
+        public async override Task<IEnumerable<Animal>> GetAllAsync()
             => await _dbContext.Animals
             .AsNoTracking()
             .ToListAsync();
@@ -22,7 +22,7 @@ namespace DAL.Repositories.AnimalRepository
             .AsNoTracking()
             .ToListAsync();
 
-        public async override Task<Animal?> GetById(int id)
+        public async override Task<Animal?> GetByIdAsync(int id)
             => await _dbContext.Animals
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
@@ -32,5 +32,10 @@ namespace DAL.Repositories.AnimalRepository
             .Include(a => a.AnimalDetail)
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
+
+        public async Task<Animal?> GetByNameAsync(string name)
+            => await _dbContext.Animals
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Name == name);
     }
 }
