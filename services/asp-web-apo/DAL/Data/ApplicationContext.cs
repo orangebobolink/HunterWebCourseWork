@@ -15,6 +15,8 @@ namespace DAL.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Messanger> Messangers { get; set; }
         public DbSet<Gender> Genders { get; set; }
+        public DbSet<MethodOfHunting> Methods { get; set; }
+        public DbSet<TypeOfHunting> Types { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
