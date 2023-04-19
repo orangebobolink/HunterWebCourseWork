@@ -10,13 +10,13 @@ namespace DAL.Repositories.TokenRepository
         {
         }
 
-        public async override Task<IEnumerable<Token>> GetAll()
+        public async override Task<IEnumerable<Token>> GetAllAsync()
             => await _dbContext.Tokens
                 .Include(t => t.User)
                 .AsNoTracking()
                 .ToListAsync();
 
-        public async override Task<Token?> GetById(int id)
+        public async override Task<Token?> GetByIdAsync(int id)
              => await _dbContext.Tokens
                 .Include(t => t.User)
                 .AsNoTracking()

@@ -10,7 +10,7 @@ namespace DAL.Repositories.UserRepository
         {
         }
 
-        public async override Task<IEnumerable<User>> GetAll()
+        public async override Task<IEnumerable<User>> GetAllAsync()
              => await _dbContext.Users
                 .AsNoTracking()
                 .ToListAsync();
@@ -22,7 +22,7 @@ namespace DAL.Repositories.UserRepository
                 .AsNoTracking()
                 .ToListAsync();
 
-        public async override Task<User?> GetById(int id)
+        public async override Task<User?> GetByIdAsync(int id)
             => await _dbContext.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);

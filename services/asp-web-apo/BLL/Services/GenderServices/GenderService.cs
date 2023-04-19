@@ -21,9 +21,9 @@ namespace BLL.Services.GenderServices
             _logger = logger;
         }
 
-        public async Task<GenderDTO> Add(GenderDTO item)
+        public async Task<GenderDTO> AddAsync(GenderDTO item)
         {
-            var genderChecked = await _genderRepository.GetByName(item.Name);
+            var genderChecked = await _genderRepository.GetByNameAsync(item.Name);
 
             if(genderChecked is not null)
             {
@@ -40,9 +40,9 @@ namespace BLL.Services.GenderServices
             return item;
         }
 
-        public async Task<IEnumerable<GenderDTO>> GetAll()
+        public async Task<IEnumerable<GenderDTO>> GetAllAsync()
         {
-            var genders = await _genderRepository.GetAll();
+            var genders = await _genderRepository.GetAllAsync();
 
             if(genders is null)
             {
@@ -56,9 +56,9 @@ namespace BLL.Services.GenderServices
             return mapperModel;
         }
 
-        public async Task<GenderDTO?> GetById(int id)
+        public async Task<GenderDTO?> GetByIdAsync(int id)
         {
-            var genderChecked = await _genderRepository.GetById(id);
+            var genderChecked = await _genderRepository.GetByIdAsync(id);
 
             if(genderChecked is null)
             {
@@ -72,9 +72,9 @@ namespace BLL.Services.GenderServices
             return mapperModel;
         }
 
-        public async Task<GenderDTO> Remove(GenderDTO item)
+        public async Task<GenderDTO> RemoveAsync(GenderDTO item)
         {
-            var genderChecked = await _genderRepository.GetById(item.Id);
+            var genderChecked = await _genderRepository.GetByIdAsync(item.Id);
 
             if(genderChecked is null)
             {
@@ -88,9 +88,9 @@ namespace BLL.Services.GenderServices
             return item;
         }
 
-        public async Task<GenderDTO> Update(GenderDTO item)
+        public async Task<GenderDTO> UpdateAsync(GenderDTO item)
         {
-            var genderChecked = await _genderRepository.GetById(item.Id);
+            var genderChecked = await _genderRepository.GetByIdAsync(item.Id);
 
             if(genderChecked is null)
             {
