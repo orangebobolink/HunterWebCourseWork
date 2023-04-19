@@ -3,7 +3,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories.MessangerRepository
 {
-    public interface IMessangerRepository : IRepository<Messanger>
+    public interface IMessangerRepository : IRepository<Messanger>, IGetByNameRepository<Messanger>
     {
 
     }

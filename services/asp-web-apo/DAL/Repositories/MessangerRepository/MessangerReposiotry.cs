@@ -19,5 +19,10 @@ namespace DAL.Repositories.MessangerRepository
             => await _dbContext.Messangers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+        public async Task<Messanger?> GetByNameAsync(string name)
+            => await _dbContext.Messangers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Name == name);
     }
 }
