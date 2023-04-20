@@ -10,6 +10,14 @@ namespace DAL.Repositories.OrderRepository
         {
         }
 
+        public async Task<IEnumerable<Order>> GetAllByPredict(Func<Order, bool> predicate)
+            => await _dbContext.Orders
+                .Include(o => o.User)
+                .Include(o => o.Messanger)
+                .AsNoTracking()
+                .Where(o => predicate(o))
+                .ToListAsync();
+
         public async override Task<IEnumerable<Order>> GetAllAsync()
             => await _dbContext.Orders
                 .Include(o => o.User)
@@ -23,5 +31,7 @@ namespace DAL.Repositories.OrderRepository
                 .Include(o => o.Messanger)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(o => o.Id == id);
+
+
     }
 }
