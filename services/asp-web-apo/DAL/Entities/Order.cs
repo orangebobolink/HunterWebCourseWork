@@ -5,6 +5,7 @@ namespace DAL.Entities
     public class Order
     {
         public int Id { get; set; }
+        public DateTime FilingDate { get; set; } = DateTime.Now;
         public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
