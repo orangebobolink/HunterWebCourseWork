@@ -1,17 +1,16 @@
 ﻿using DAL.Entities.UserEntities;
+using DAL.Entities;
 
-namespace DAL.Entities
+namespace BLL.DTOs
 {
-    public class Order
+    public class OrderDTO
     {
         public int Id { get; set; }
-        public DateTime FilingDate { get; set; } = DateTime.Now;
         public string Email { get; set; } = string.Empty;
+        public DateTime FilingDate { get; set; } = DateTime.Now;
         public string FirstName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public int? MessangerId { get; set; }
-        public Messanger? Messanger { get; set; }
-        public int? UserId { get; set; }
+        public string MessangerName { get; set; } = string.Empty;
         public User? User { get; set; }
         public int NumberHunters { get; set; }
         public int CountDates { get; set; }

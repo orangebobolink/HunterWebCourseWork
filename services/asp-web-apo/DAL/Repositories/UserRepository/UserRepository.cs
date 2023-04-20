@@ -33,5 +33,10 @@ namespace DAL.Repositories.UserRepository
                 .Include(u => u.UserDetail.Messanger)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
+
+        public async Task<User?> GetByEmailAsync(string email)
+                => await _dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email);
     }
 }
