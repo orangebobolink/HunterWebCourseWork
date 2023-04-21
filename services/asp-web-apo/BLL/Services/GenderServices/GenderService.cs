@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BLL.DTOs;
+using BLL.DTOs.HuntingSeason;
 using BLL.Exceptions;
 using DAL.Entities.HuntingSeasonEntities;
 using DAL.Repositories.GenderRepository;
@@ -72,9 +72,20 @@ namespace BLL.Services.GenderServices
             return mapperModel;
         }
 
-        public Task<GenderDTO> GetByNameAsync(string name)
+        public async Task<GenderDTO> GetByNameAsync(string name)
         {
-            throw new System.NotImplementedException();
+            var genderChecked = await _genderRepository.GetByNameAsync(name);
+
+            if(genderChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("There is not data yet");
+            }
+
+            var mapperModel = _mapper.Map<GenderDTO>(genderChecked);
+
+            return mapperModel;
         }
 
         public async Task<GenderDTO> RemoveAsync(GenderDTO item)
