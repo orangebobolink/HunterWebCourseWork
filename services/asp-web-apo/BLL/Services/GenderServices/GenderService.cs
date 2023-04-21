@@ -72,6 +72,11 @@ namespace BLL.Services.GenderServices
             return mapperModel;
         }
 
+        public Task<GenderDTO> GetByNameAsync(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<GenderDTO> RemoveAsync(GenderDTO item)
         {
             var genderChecked = await _genderRepository.GetByIdAsync(item.Id);
