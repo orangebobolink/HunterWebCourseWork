@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.HuntingSeason;
 using BLL.Interfaces;
 
 namespace BLL.Services.GenderServices
