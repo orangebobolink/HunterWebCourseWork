@@ -14,6 +14,7 @@ namespace DAL.Repositories.OrderRepository
             => await _dbContext.Orders
                 .Include(o => o.User)
                 .Include(o => o.Messanger)
+                .Include(o => o.Status)
                 .AsNoTracking()
                 .Where(o => predicate(o))
                 .ToListAsync();
@@ -22,6 +23,7 @@ namespace DAL.Repositories.OrderRepository
             => await _dbContext.Orders
                 .Include(o => o.User)
                 .Include(o => o.Messanger)
+                .Include(o => o.Status)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -29,9 +31,8 @@ namespace DAL.Repositories.OrderRepository
             => await _dbContext.Orders
                 .Include(o => o.User)
                 .Include(o => o.Messanger)
+                .Include(o => o.Status)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(o => o.Id == id);
-
-
     }
 }

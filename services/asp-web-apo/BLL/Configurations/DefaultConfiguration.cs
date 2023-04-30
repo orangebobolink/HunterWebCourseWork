@@ -1,5 +1,6 @@
 ﻿using BLL.Mappings;
 using BLL.Services.AnimalServices;
+using BLL.Services.AuthServices;
 using BLL.Services.GenderServices;
 using BLL.Services.HuntingSeasonServices;
 using BLL.Services.MessangerServices;
@@ -27,6 +28,7 @@ namespace BLL.Configurations
         private static void ConfigurationServices(this IServiceCollection service)
         {
             service.AddScoped<IAnimalService, AnimalService>();
+            service.AddScoped<IAuthService, AuthService>();
             service.AddScoped<IGenderService, GenderService>();
             service.AddScoped<IHuntingSeasonService, HuntingSeasonService>();
             service.AddScoped<IMessangerService, MessangerService>();

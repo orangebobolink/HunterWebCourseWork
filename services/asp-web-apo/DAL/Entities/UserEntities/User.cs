@@ -8,8 +8,10 @@ namespace DAL.Entities.UserEntities
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
-        public string PasswordHash { get; set; } = string.Empty;
-        public int UserDatailId { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public List<Role> Roles { get; set; } = new();
+        public List<RoleUser> RoleUsers { get; set; } = new();
         public UserDetail? UserDetail { get; set; }
     }
 }

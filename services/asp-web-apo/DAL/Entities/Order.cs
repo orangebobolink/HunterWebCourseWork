@@ -17,5 +17,7 @@ namespace DAL.Entities
         public int CountDates { get; set; }
         public bool IncludeHouse { get; set; } = false;
         public string AdditionalInfo { get; set; } = string.Empty;
+        public int StatusId { get; set; }
+        public Status Status { get; set; }
     }
 }

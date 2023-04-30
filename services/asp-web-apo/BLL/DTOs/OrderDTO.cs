@@ -1,5 +1,4 @@
 ﻿using DAL.Entities.UserEntities;
-using DAL.Entities;
 
 namespace BLL.DTOs
 {

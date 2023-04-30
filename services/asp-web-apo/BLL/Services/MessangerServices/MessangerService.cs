@@ -3,8 +3,6 @@ using BLL.DTOs;
 using BLL.Exceptions;
 using BLL.Services.GenderServices;
 using DAL.Entities;
-using DAL.Entities.HuntingSeasonEntities;
-using DAL.Repositories.GenderRepository;
 using DAL.Repositories.MessangerRepository;
 using Microsoft.Extensions.Logging;
 

@@ -5,6 +5,7 @@ using DAL.Repositories.HuntingSeasonRepository;
 using DAL.Repositories.MessangerRepository;
 using DAL.Repositories.MethodRepository;
 using DAL.Repositories.OrderRepository;
+using DAL.Repositories.RoleRepository;
 using DAL.Repositories.TokenRepository;
 using DAL.Repositories.TypeRepository;
 using DAL.Repositories.UserRepository;
@@ -32,6 +33,7 @@ namespace DAL.Configurations
         private static void ConfigurationRepositories(this IServiceCollection service)
         {
             service.AddScoped<IAnimalRepository, AnimalRepository>();
+            service.AddScoped<IRoleRepository, RoleRepository>();
             service.AddScoped<IGenderRepository, GenderRepository>();
             service.AddScoped<IMethodRepository, MethodRepository>();
             service.AddScoped<ITypeRepository, TypeRepository>();
