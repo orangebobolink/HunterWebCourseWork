@@ -12,11 +12,13 @@ namespace DAL.Repositories.UserRepository
 
         public async override Task<IEnumerable<User>> GetAllAsync()
              => await _dbContext.Users
+                .Include(u => u.Roles)
                 .AsNoTracking()
                 .ToListAsync();
 
         public async Task<IEnumerable<User?>> GetAllIncludeDetailAsync()
              => await _dbContext.Users
+                .Include(u => u.Roles)
                 .Include(u => u.UserDetail)
                 .Include(u => u.UserDetail.Messanger)
                 .AsNoTracking()
@@ -24,11 +26,13 @@ namespace DAL.Repositories.UserRepository
 
         public async override Task<User?> GetByIdAsync(int id)
             => await _dbContext.Users
+                .Include(u => u.Roles)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
 
         public async Task<User?> GetByIdIncludeDetailAsync(int id)
             => await _dbContext.Users
+                .Include(u => u.Roles)
                 .Include(u => u.UserDetail)
                 .Include(u => u.UserDetail.Messanger)
                 .AsNoTracking()
@@ -36,6 +40,7 @@ namespace DAL.Repositories.UserRepository
 
         public async Task<User?> GetByEmailAsync(string email)
                 => await _dbContext.Users
+                .Include(u => u.Roles)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
     }
