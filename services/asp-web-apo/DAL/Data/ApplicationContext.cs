@@ -17,6 +17,12 @@ namespace DAL.Data
         public DbSet<Gender> Genders { get; set; }
         public DbSet<MethodOfHunting> Methods { get; set; }
         public DbSet<TypeOfHunting> Types { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +53,25 @@ namespace DAL.Data
             modelBuilder.Entity<Messanger>()
               .HasIndex(messanger => messanger.Name)
               .IsUnique();
+
+            modelBuilder.Entity<Role>()
+              .HasIndex(role => role.Name)
+              .IsUnique();
+
+            modelBuilder.Entity<RoleUser>()
+                .HasKey(x => new { x.RoleId, x.UserId });
+            modelBuilder.Entity<Role>()
+                .HasMany(c => c.Users)
+                .WithMany(s => s.Roles)
+                .UsingEntity<RoleUser>(
+                j => j.HasOne(pt => pt.User)
+                    .WithMany(p => p.RoleUsers)
+                    .HasForeignKey(pt => pt.UserId),
+                j => j.HasOne(pt => pt.Role)
+                    .WithMany(t => t.RoleUsers)
+                    .HasForeignKey(pt => pt.RoleId));
+
+
         }
     }
 }
