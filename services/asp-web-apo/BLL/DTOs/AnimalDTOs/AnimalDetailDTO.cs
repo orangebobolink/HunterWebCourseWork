@@ -9,6 +9,7 @@ namespace BLL.DTOs.Animal
         public string ImageUrl { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string TableId { get; set; } = string.Empty;
+        // TODO: тут поменять на huntingseasonDTO и сервис изменить
         public List<HuntingSeasonDetailDTO> HuntingSeasons { get; set; } = new List<HuntingSeasonDetailDTO>();
     }
 }
