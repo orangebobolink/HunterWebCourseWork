@@ -3,7 +3,7 @@ using BLL.Interfaces;
 
 namespace BLL.Services.MessangerServices
 {
-    public interface IMessangerService : IRepositoryService<MessangerDTO>
+    public interface IMessangerService : IBaseService<MessangerDTO>
     {
     }
 }

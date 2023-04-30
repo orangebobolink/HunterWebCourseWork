@@ -22,6 +22,8 @@ namespace BLL.Services.AnimalServices
 
         public async Task<AnimalDetailDTO> AddAsync(AnimalDetailDTO item)
         {
+            // TODO: по getbyname методы, типы и тд подсоеденять 
+
             var animalChecked = _animalRepository.GetByNameAsync(item.Name);
 
             if(animalChecked is not null)

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BLL.DTOs;
+using BLL.DTOs.HuntingSeason;
 using BLL.Exceptions;
 using DAL.Entities.HuntingSeasonEntities;
 using DAL.Repositories.TypeRepository;
