@@ -50,13 +50,13 @@ namespace BLL.Services.AuthServices
 
             var user = _mapper.Map<UserDTO>(userChecked);
 
-            Token token = _tokenService.CreateAccessToken(user);
+            string token = _tokenService.CreateAccessToken(user);
 
             var userResponse = new ResponseUserDto()
             {
                 Email = user.Email,
                 Roles = user.Roles,
-                AccessToken = token.RefreshToken
+                AccessToken = token
             };
 
             return userResponse;

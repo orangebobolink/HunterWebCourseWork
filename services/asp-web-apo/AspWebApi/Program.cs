@@ -14,6 +14,7 @@ var configure = new ConfigurationBuilder()
     .Build();
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 builder.Services.ConfurationBisnessLogic(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

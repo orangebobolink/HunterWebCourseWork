@@ -1,12 +1,17 @@
 ﻿using AutoMapper;
+using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
+using BLL.Exceptions;
 using DAL.Entities;
+using DAL.Entities.UserEntities;
 using DAL.Repositories.TokenRepository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BLL.Services.TokeService
@@ -26,28 +31,23 @@ namespace BLL.Services.TokeService
             _configuration = configuration;
         }
 
-        public Token CreateAccessToken(UserDTO user)
+        public string CreateAccessToken(UserDTO user)
         {
             var jwt = CreateToken(user);
 
-            var token = new Token()
-            {
-                RefreshToken = jwt,
-            };
-
-            return token;
+            return jwt;
         }
 
-        public Token CreateRefreshToken(UserDTO user)
+        public RefreshTokenDTO CreateRefreshToken()
         {
-            var jwt = CreateToken(user);
-
-            var token = new Token()
+            var refreshToken = new RefreshTokenDTO()
             {
-                RefreshToken = jwt,
+                RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(30),
+                Created = DateTime.Now
             };
 
-            return token;
+            return refreshToken;
         }
 
         private string CreateToken(UserDTO user)
@@ -65,7 +65,7 @@ namespace BLL.Services.TokeService
 
             var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(1),
+                    expires: DateTime.Now.AddSeconds(10),
                     signingCredentials: cred
                 );
 
@@ -74,29 +74,53 @@ namespace BLL.Services.TokeService
             return jwt;
         }
 
-        public bool DeleteToken(Token refreshToken)
+        public Task<bool> DeleteToken(RefreshTokenDTO refreshToken)
         {
-            throw new NotImplementedException();
+            throw new Exceptions.NotImplementedException("");
         }
 
-        public bool FindToken(Token refreshToken)
+        public async Task<RefreshTokenDTO> FindToken(string token)
         {
-            throw new NotImplementedException();
+            var tokenChecked = await _tokenRepository.GetByTokenAsync(token);
+
+            if(tokenChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("Token is not found");
+            }
+
+            var mapperModel = _mapper.Map<RefreshTokenDTO>(tokenChecked);
+
+            return mapperModel;
         }
 
-        public bool SaveToken(Token refreshToken)
+        public Task<bool> SaveToken(RefreshTokenDTO refreshToken)
         {
-            throw new NotImplementedException();
+            throw new Exceptions.NotImplementedException("");
         }
 
         public bool ValidateAccessToken(Token token)
         {
-            throw new NotImplementedException();
+            throw new Exceptions.NotImplementedException("");
         }
 
-        public bool ValidateRefreshToken(Token token)
+        public async Task<bool> ValidateRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var token = await FindToken(refreshToken);
+
+            if(!token.RefreshToken.Equals(refreshToken))
+            {
+                _logger.LogError("Unautorize");
+                throw new Exceptions.UnauthorizedAccessException("Refresh token is not validation");
+            }
+            else if(token.Expires < DateTime.Now)
+            {
+                _logger.LogError("Unautorize");
+                throw new Exceptions.UnauthorizedAccessException("Refresh token is not validation");
+            }
+
+            return true;
         }
     }
 }
