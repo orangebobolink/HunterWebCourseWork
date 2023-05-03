@@ -1,5 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Entities;
+using DAL.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.TokenRepository
@@ -24,5 +25,10 @@ namespace DAL.Repositories.TokenRepository
             => await _dbContext.Tokens
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.RefreshToken == token);
+
+        public async Task<Token?> GetByUserIdAsync(int userId)
+            => await _dbContext.Tokens
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.UserId == userId);
     }
 }

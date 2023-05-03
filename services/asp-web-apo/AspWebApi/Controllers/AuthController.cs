@@ -47,21 +47,27 @@ namespace AspWebApi.Controllers
         {
             var userResponse = await _authService.Login(request);
 
-            var refreshToken = _tokenService.CreateRefreshToken();
+            //var refreshToken = _tokenService.CreateRefreshToken();
 
-            SetRefreshToken(refreshToken);
-
-            userResponse.RefreshToken = refreshToken.RefreshToken;
-            userResponse.Expires = refreshToken.Expires;
-            userResponse.Created = refreshToken.Created;
+            SetRefreshToken(new RefreshTokenDTO
+            {
+                RefreshToken = userResponse.RefreshToken,
+                Created = userResponse.Created,
+                Expires = userResponse.Expires
+            });
 
             return Ok(userResponse);
         }
 
-        [HttpPost("refresh-token")]
+        [HttpPost("refresh")]
         public async Task<ActionResult<string>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
+
+            var validate = await _tokenService.ValidateRefreshToken(refreshToken);
+
+            if(!validate)
+                Unauthorized();
 
             var user = await _userService.Refresh(refreshToken);
 
@@ -80,7 +86,8 @@ namespace AspWebApi.Controllers
             var cookieOptions = new CookieOptions()
             {
                 HttpOnly = true,
-                Expires = refreshToken.Expires
+                Expires = refreshToken.Expires,
+                SameSite = SameSiteMode.Lax
             };
 
             Response.Cookies.Append("refreshToken", refreshToken.RefreshToken, cookieOptions);

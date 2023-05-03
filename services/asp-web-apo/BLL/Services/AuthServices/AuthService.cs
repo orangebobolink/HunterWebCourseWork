@@ -48,6 +48,18 @@ namespace BLL.Services.AuthServices
                 throw new NotFoundException("Password is not valid");
             }
 
+
+            var refreshToken = _tokenService.CreateRefreshToken(userChecked.Email);
+
+            refreshToken.UserId = userChecked.Id;
+
+            var oldRefreshToken = await _tokenService.FindTokeByUserId(refreshToken.UserId);
+
+            if(oldRefreshToken.RefreshToken != string.Empty)
+                await _tokenService.RemoveAsync(oldRefreshToken);
+
+            await _tokenService.AddAsync(refreshToken);
+
             var user = _mapper.Map<UserDTO>(userChecked);
 
             string token = _tokenService.CreateAccessToken(user);
@@ -56,12 +68,13 @@ namespace BLL.Services.AuthServices
             {
                 Email = user.Email,
                 Roles = user.Roles,
-                AccessToken = token
+                AccessToken = token,
+                RefreshToken = refreshToken.RefreshToken,
+                Created = refreshToken.Created,
+                Expires = refreshToken.Expires
             };
 
             return userResponse;
-
-            ///if(!V)
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

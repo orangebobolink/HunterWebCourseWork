@@ -16,7 +16,7 @@ namespace AspWebApi.Controllers
             _animalService = animalService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("get")]
         public async Task<ActionResult<List<AnimalDTO>>> GetAllAnimalAsync()
         {

@@ -42,10 +42,8 @@ namespace BLL.Configurations
         private static void ConfigurationAutoMapper(this IServiceCollection service)
         {
             service.AddAutoMapper(
-                    typeof(AnimalDetailProfile),
                     typeof(AnimalProfile),
                     typeof(GenderProfile),
-                    typeof(HuntingOfSeasonDetailProfile),
                     typeof(HuntingOfSeasonProfile),
                     typeof(MessangerProfile),
                     typeof(MethodOfHuntingProfile),

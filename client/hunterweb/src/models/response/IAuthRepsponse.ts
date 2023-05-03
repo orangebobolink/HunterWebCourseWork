@@ -1,7 +1,8 @@
 import {IUser} from "../IUser";
 
-export interface AuthRepsponse {
+export interface IAuthRepsponse {
     accessToken: string
     refreshToken: string
-    user: IUser
+    email: string
+    roles: string[]
 }
