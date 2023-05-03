@@ -8,7 +8,7 @@ namespace BLL.Mappings
     {
         public TokenProfile()
         {
-            CreateMap<Token, TokenDTO>().ReverseMap();
+            CreateMap<Token, RefreshTokenDTO>().ReverseMap();
         }
     }
 }

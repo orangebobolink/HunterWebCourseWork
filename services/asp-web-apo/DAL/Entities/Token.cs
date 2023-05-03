@@ -6,7 +6,9 @@ namespace DAL.Entities
     {
         public int Id { get; set; }
         public int? UserId { get; set; }
-        public User? User { get; set; }
+        public User User { get; set; }
         public string RefreshToken { get; set; } = string.Empty;
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Expires { get; set; }
     }
 }

@@ -30,6 +30,10 @@ namespace DAL.Data
                 .HasIndex(user => user.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<Token>()
+                .HasIndex(token => token.RefreshToken)
+                .IsUnique();
+
             modelBuilder.Entity<UserDetail>()
                .HasIndex(user => user.Phone)
                .IsUnique();
@@ -60,6 +64,7 @@ namespace DAL.Data
 
             modelBuilder.Entity<RoleUser>()
                 .HasKey(x => new { x.RoleId, x.UserId });
+
             modelBuilder.Entity<Role>()
                 .HasMany(c => c.Users)
                 .WithMany(s => s.Roles)
@@ -70,8 +75,6 @@ namespace DAL.Data
                 j => j.HasOne(pt => pt.Role)
                     .WithMany(t => t.RoleUsers)
                     .HasForeignKey(pt => pt.RoleId));
-
-
         }
     }
 }

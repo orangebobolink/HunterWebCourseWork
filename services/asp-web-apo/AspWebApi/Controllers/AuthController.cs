@@ -1,11 +1,11 @@
-﻿using BLL.DTOs.UserDTOs;
+﻿using BLL.DTOs.TokenDTOs;
+using BLL.DTOs.UserDTOs;
 using BLL.Services.AuthServices;
-using Microsoft.AspNetCore.Http;
+using BLL.Services.TokeService;
+using BLL.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace AspWebApi.Controllers
 {
@@ -14,14 +14,24 @@ namespace AspWebApi.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService _authService;
+        private IUserService _userService;
+        private ITokenService _tokenService;
         private readonly IConfiguration _configuration;
 
-        // public static User user = new User();
-
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        public AuthController(IAuthService authService, ITokenService tokenService, IUserService userService, IConfiguration configuration)
         {
             _authService = authService;
+            _userService = userService;
+            _tokenService = tokenService;
             _configuration = configuration;
+        }
+
+
+        [HttpGet, Authorize]
+        public ActionResult<string> GetMe()
+        {
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            return Ok(userEmail);
         }
 
         [HttpPost("registration")]
@@ -37,31 +47,50 @@ namespace AspWebApi.Controllers
         {
             var userResponse = await _authService.Login(request);
 
+            //var refreshToken = _tokenService.CreateRefreshToken();
+
+            SetRefreshToken(new RefreshTokenDTO
+            {
+                RefreshToken = userResponse.RefreshToken,
+                Created = userResponse.Created,
+                Expires = userResponse.Expires
+            });
+
             return Ok(userResponse);
         }
 
-        private string CteateToken(UserDTO user)
+        [HttpPost("refresh")]
+        public async Task<ActionResult<string>> RefreshToken()
         {
-            List<Claim> claims = new List<Claim>
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var validate = await _tokenService.ValidateRefreshToken(refreshToken);
+
+            if(!validate)
+                Unauthorized();
+
+            var user = await _userService.Refresh(refreshToken);
+
+            SetRefreshToken(new RefreshTokenDTO()
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, "Admin")
+                RefreshToken = user.RefreshToken,
+                Created = user.Created,
+                Expires = user.Expires
+            });
+
+            return Ok(user);
+        }
+
+        private void SetRefreshToken(RefreshTokenDTO refreshToken)
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                HttpOnly = true,
+                Expires = refreshToken.Expires,
+                SameSite = SameSiteMode.Lax
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                   _configuration.GetSection("JWT:Secret").Value!));
-
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(1),
-                    signingCredentials: cred
-                );
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
+            Response.Cookies.Append("refreshToken", refreshToken.RefreshToken, cookieOptions);
         }
     }
 }

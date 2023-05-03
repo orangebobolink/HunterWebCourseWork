@@ -13,5 +13,6 @@ namespace DAL.Entities.UserEntities
         public List<Role> Roles { get; set; } = new();
         public List<RoleUser> RoleUsers { get; set; } = new();
         public UserDetail? UserDetail { get; set; }
+        public Token Token { get; set; }
     }
 }

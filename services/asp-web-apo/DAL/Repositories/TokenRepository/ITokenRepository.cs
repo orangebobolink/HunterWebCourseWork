@@ -3,7 +3,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories.TokenRepository
 {
-    public interface ITokenRepository : IRepository<Token>
+    public interface ITokenRepository : IRepository<Token>, IGetByTokenRepository<Token>, IGetByUserIdRepository<Token>
     {
     }
 }

@@ -1,12 +1,19 @@
 ﻿using AutoMapper;
+using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
+using BLL.Exceptions;
 using DAL.Entities;
+using DAL.Entities.UserEntities;
+using DAL.Migrations;
+using DAL.Repositories.OrderRepository;
 using DAL.Repositories.TokenRepository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BLL.Services.TokeService
@@ -26,31 +33,7 @@ namespace BLL.Services.TokeService
             _configuration = configuration;
         }
 
-        public Token CreateAccessToken(UserDTO user)
-        {
-            var jwt = CreateToken(user);
-
-            var token = new Token()
-            {
-                RefreshToken = jwt,
-            };
-
-            return token;
-        }
-
-        public Token CreateRefreshToken(UserDTO user)
-        {
-            var jwt = CreateToken(user);
-
-            var token = new Token()
-            {
-                RefreshToken = jwt,
-            };
-
-            return token;
-        }
-
-        private string CreateToken(UserDTO user)
+        public string CreateAccessToken(UserDTO user)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -58,6 +41,32 @@ namespace BLL.Services.TokeService
                 new Claim(ClaimTypes.Role, "user")
             };
 
+            var jwt = CreateToken(claims, DateTime.Now.AddMinutes(10));
+
+            return jwt;
+        }
+
+        public RefreshTokenDTO CreateRefreshToken(string email)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, email)
+            };
+
+            var jwt = CreateToken(claims, DateTime.Now.AddDays(30));
+
+            var refreshToken = new RefreshTokenDTO()
+            {
+                RefreshToken = jwt,
+                Expires = DateTime.Now.AddDays(30),
+                Created = DateTime.Now
+            };
+
+            return refreshToken;
+        }
+
+        private string CreateToken(List<Claim> claims, DateTime expires)
+        {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                    _configuration.GetSection("JWT:Secret").Value!));
 
@@ -65,7 +74,7 @@ namespace BLL.Services.TokeService
 
             var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(1),
+                    expires: expires,
                     signingCredentials: cred
                 );
 
@@ -74,29 +83,80 @@ namespace BLL.Services.TokeService
             return jwt;
         }
 
-        public bool DeleteToken(Token refreshToken)
+        public async Task<RefreshTokenDTO> RemoveAsync(RefreshTokenDTO refreshToken)
         {
-            throw new NotImplementedException();
+            var tokenChecked = await _tokenRepository.GetByTokenAsync(refreshToken.RefreshToken);
+
+            if(tokenChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("Token is not found");
+            }
+
+            _tokenRepository.Remove(tokenChecked);
+
+            return refreshToken;
         }
 
-        public bool FindToken(Token refreshToken)
+        public async Task<RefreshTokenDTO> FindToken(string token)
         {
-            throw new NotImplementedException();
+            var tokenChecked = await _tokenRepository.GetByTokenAsync(token);
+
+            if(tokenChecked is null)
+            {
+                _logger.LogError("");
+
+                return new RefreshTokenDTO { };
+            }
+
+            var mapperModel = _mapper.Map<RefreshTokenDTO>(tokenChecked);
+
+            return mapperModel;
         }
 
-        public bool SaveToken(Token refreshToken)
+        public async Task<RefreshTokenDTO> AddAsync(RefreshTokenDTO refreshToken)
         {
-            throw new NotImplementedException();
+            var mapperModel = _mapper.Map<Token>(refreshToken);
+
+            _tokenRepository.Add(mapperModel);
+            await _tokenRepository.SaveChangesAsync();
+
+            return refreshToken;
         }
 
         public bool ValidateAccessToken(Token token)
         {
-            throw new NotImplementedException();
+            throw new Exceptions.NotImplementedException("");
         }
 
-        public bool ValidateRefreshToken(Token token)
+        public async Task<bool> ValidateRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var token = await FindToken(refreshToken);
+
+            //if(token.Expires < DateTime.Now)
+            //{
+            //    _logger.LogError("Unautorize");
+            //    throw new Exceptions.UnauthorizedAccessException("Refresh token is not validation");
+            //}
+
+            return true;
+        }
+
+        public async Task<RefreshTokenDTO> FindTokeByUserId(int id)
+        {
+            var tokenChecked = await _tokenRepository.GetByUserIdAsync(id);
+
+            if(tokenChecked is null)
+            {
+                _logger.LogError("");
+
+                return new RefreshTokenDTO { };
+            }
+
+            var mapperModel = _mapper.Map<RefreshTokenDTO>(tokenChecked);
+
+            return mapperModel;
         }
     }
 }

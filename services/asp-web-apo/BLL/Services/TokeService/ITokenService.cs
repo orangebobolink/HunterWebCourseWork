@@ -1,16 +1,18 @@
-﻿using BLL.DTOs.UserDTOs;
+﻿using BLL.DTOs.TokenDTOs;
+using BLL.DTOs.UserDTOs;
 using DAL.Entities;
 
 namespace BLL.Services.TokeService
 {
     public interface ITokenService
     {
-        public Token CreateAccessToken(UserDTO user);
-        public Token CreateRefreshToken(UserDTO user);
+        public string CreateAccessToken(UserDTO user);
+        public RefreshTokenDTO CreateRefreshToken(string email);
         public bool ValidateAccessToken(Token token);
-        public bool ValidateRefreshToken(Token token);
-        public bool SaveToken(Token refreshToken);
-        public bool DeleteToken(Token refreshToken);
-        public bool FindToken(Token refreshToken);
+        public Task<bool> ValidateRefreshToken(string refreshToken);
+        public Task<RefreshTokenDTO> AddAsync(RefreshTokenDTO refreshToken);
+        public Task<RefreshTokenDTO> RemoveAsync(RefreshTokenDTO refreshToken);
+        public Task<RefreshTokenDTO> FindToken(string token);
+        public Task<RefreshTokenDTO> FindTokeByUserId(int id);
     }
 }

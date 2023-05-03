@@ -5,9 +5,7 @@ namespace BLL.Services.UserServices
 {
     public interface IUserService
     {
-        public UserDTO Registration(RequestUserDTO user);
-        public UserDTO Login(RequestUserDTO user);
-        public UserDTO Logout(Token refreshToken);
-        public UserDTO Refresh(Token refreshToken);
+        public Task<UserDTO> GetByEmailAsync(string email);
+        public Task<ResponseUserDto> Refresh(string refreshToken);
     }
 }

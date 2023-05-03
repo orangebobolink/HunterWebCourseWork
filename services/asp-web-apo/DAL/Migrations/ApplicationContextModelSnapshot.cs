@@ -306,6 +306,12 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -315,7 +321,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Tokens");
                 });
@@ -493,8 +501,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.Token", b =>
                 {
                     b.HasOne("DAL.Entities.UserEntities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithOne("Token")
+                        .HasForeignKey("DAL.Entities.Token", "UserId");
 
                     b.Navigation("User");
                 });
@@ -570,6 +578,9 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.UserEntities.User", b =>
                 {
                     b.Navigation("RoleUsers");
+
+                    b.Navigation("Token")
+                        .IsRequired();
 
                     b.Navigation("UserDetail");
                 });
