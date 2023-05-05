@@ -81,6 +81,18 @@ namespace AspWebApi.Controllers
             return Ok(user);
         }
 
+        [HttpPost("logout")]
+        public async Task<ActionResult<string>> Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var user = await _userService.Logout(refreshToken!);
+
+            Response.Cookies.Delete("refreshToken");
+
+            return Ok(refreshToken);
+        }
+
         private void SetRefreshToken(RefreshTokenDTO refreshToken)
         {
             var cookieOptions = new CookieOptions()
