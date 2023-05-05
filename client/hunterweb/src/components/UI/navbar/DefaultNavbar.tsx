@@ -44,7 +44,9 @@ const DefaultNavbar = () => {
                          Настройки
                      </Dropdown.Item>
                      <Dropdown.Divider />
-                     <Dropdown.Item>
+                     <Dropdown.Item onClick={()=>{
+                       store.logout()
+                     }}>
                          Выйти
                      </Dropdown.Item>
                  </Dropdown>

@@ -22,6 +22,12 @@ namespace BLL.Mappings
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserDetail.Phone))
                 .ForMember(dest => dest.Messanger, opt => opt.MapFrom(src => src.UserDetail.Messanger.Name))
                 .ReverseMap();
+
+            CreateMap<User, RegisterUserDTO>()
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.UserDetail.FirstName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserDetail.Phone))
+                .ForMember(dest => dest.Messanger, opt => opt.MapFrom(src => src.UserDetail.Messanger.Name))
+                .ReverseMap();
         }
     }
 }

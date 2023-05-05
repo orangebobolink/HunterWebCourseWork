@@ -2,10 +2,7 @@
 using BLL.DTOs.UserDTOs;
 using BLL.Services.AuthServices;
 using BLL.Services.TokeService;
-using BLL.Services.UserServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AspWebApi.Controllers
 {
@@ -14,28 +11,16 @@ namespace AspWebApi.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService _authService;
-        private IUserService _userService;
         private ITokenService _tokenService;
-        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService, ITokenService tokenService, IUserService userService, IConfiguration configuration)
+        public AuthController(IAuthService authService, ITokenService tokenService)
         {
             _authService = authService;
-            _userService = userService;
             _tokenService = tokenService;
-            _configuration = configuration;
-        }
-
-
-        [HttpGet, Authorize]
-        public ActionResult<string> GetMe()
-        {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            return Ok(userEmail);
         }
 
         [HttpPost("registration")]
-        public async Task<ActionResult<ResponseUserDto>> Register(RequestUserDTO request)
+        public async Task<ActionResult<ResponseUserDto>> Register(RegisterUserDTO request)
         {
             var user = await _authService.Register(request);
 
@@ -69,7 +54,7 @@ namespace AspWebApi.Controllers
             if(!validate)
                 Unauthorized();
 
-            var user = await _userService.Refresh(refreshToken);
+            var user = await _authService.Refresh(refreshToken);
 
             SetRefreshToken(new RefreshTokenDTO()
             {
@@ -79,6 +64,18 @@ namespace AspWebApi.Controllers
             });
 
             return Ok(user);
+        }
+
+        [HttpPost("logout")]
+        public async Task<ActionResult<string>> Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var user = await _authService.Logout(refreshToken!);
+
+            Response.Cookies.Delete("refreshToken");
+
+            return Ok(refreshToken);
         }
 
         private void SetRefreshToken(RefreshTokenDTO refreshToken)
