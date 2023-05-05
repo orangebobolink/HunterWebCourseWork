@@ -159,9 +159,12 @@ namespace BLL.Services.AuthServices
 
             await _tokenService.AddAsync(newRefreshToken);
 
-            var accessToken = _tokenService.CreateAccessToken(user);
+            var userDto = _mapper.Map<UserDTO>(user);
+
+            var accessToken = _tokenService.CreateAccessToken(userDto);
 
             var mapperModel = _mapper.Map<ResponseUserDto>(user);
+
             mapperModel.RefreshToken = newRefreshToken.RefreshToken;
             mapperModel.Created = newRefreshToken.Created;
             mapperModel.Expires = newRefreshToken.Expires;

@@ -19,7 +19,6 @@ namespace BLL.Services.UserServices
         public UserService(IUserRepository userRepository, IMapper mapper, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
-            _tokenService = tokenService;
             _mapper = mapper;
             _logger = logger;
         }

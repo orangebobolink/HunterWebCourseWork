@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {Button} from 'flowbite-react';
 
 interface Props {
     name:string,
@@ -16,6 +17,7 @@ const AnimalPost:FC<Props> = ({name, imageSrc, imageAlt, href, description}) => 
                     src={imageSrc}
                     alt={imageAlt}
                     className="h-full w-full object-cover object-center"
+                    onClick={}
                 />
             </div>
             <h3 className="mt-6 text-sm text-gray-500">

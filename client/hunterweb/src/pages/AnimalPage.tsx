@@ -25,6 +25,15 @@ const callouts = [
     },
 ]
 
+interface IAnimal {
+    name: string,
+    href: string,
+    imageSrc: string,
+    imageAlt: string,
+    description: string
+}
+
+
 const AnimalPage = () => {
     return (
         <div className="bg-gray-100">
