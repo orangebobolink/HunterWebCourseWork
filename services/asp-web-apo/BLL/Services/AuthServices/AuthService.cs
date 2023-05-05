@@ -99,7 +99,7 @@ namespace BLL.Services.AuthServices
             }
         }
 
-        public async Task<ResponseUserDto> Register(RequestUserDTO requestUserDTO)
+        public async Task<ResponseUserDto> Register(RegisterUserDTO requestUserDTO)
         {
             // TODO: добавит проверки для email и пароль
             var userChecked = await _userRepository.GetByEmailAsync(requestUserDTO.Email);
