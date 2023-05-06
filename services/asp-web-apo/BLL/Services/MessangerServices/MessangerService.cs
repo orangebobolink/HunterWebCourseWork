@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTOs;
 using BLL.Exceptions;
-using BLL.Services.GenderServices;
 using DAL.Entities;
 using DAL.Repositories.MessangerRepository;
 using Microsoft.Extensions.Logging;
@@ -12,9 +11,9 @@ namespace BLL.Services.MessangerServices
     {
         private IMessangerRepository _messangerRepository;
         private IMapper _mapper;
-        private ILogger<GenderService> _logger;
+        private ILogger<MessangerService> _logger;
 
-        public MessangerService(IMessangerRepository messangerRepository, IMapper mapper, ILogger<GenderService> logger)
+        public MessangerService(IMessangerRepository messangerRepository, IMapper mapper, ILogger<MessangerService> logger)
         {
             _messangerRepository = messangerRepository;
             _mapper = mapper;

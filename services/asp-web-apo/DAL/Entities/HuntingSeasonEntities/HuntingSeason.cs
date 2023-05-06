@@ -9,7 +9,8 @@ namespace DAL.Entities.HuntingSeasonEntities
         public DateTime DateStart { get; set; } // TODO: сделать так чтоб выдовала только день и месяц
         [Column(TypeName = "date")]
         public DateTime DateEnd { get; set; } // TODO: сделать так чтоб выдовала только день и месяц
+        public int AnimalId { get; set; }
         public int HuntingSeasonDetailId { get; set; }
-        public HuntingSeasonDetail? HuntingSeasonDetail { get; set; } = new HuntingSeasonDetail();
+        public HuntingSeasonDetail? HuntingSeasonDetail { get; set; }
     }
 }

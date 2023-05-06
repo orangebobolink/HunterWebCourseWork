@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
-using BLL.Exceptions;
 using DAL.Entities;
-using DAL.Entities.UserEntities;
-using DAL.Migrations;
-using DAL.Repositories.OrderRepository;
 using DAL.Repositories.TokenRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace BLL.Services.TokeService
@@ -91,7 +85,7 @@ namespace BLL.Services.TokeService
             {
                 _logger.LogError("");
 
-                throw new NotFoundException("Token is not found");
+                return refreshToken;
             }
 
             _tokenRepository.Remove(tokenChecked);

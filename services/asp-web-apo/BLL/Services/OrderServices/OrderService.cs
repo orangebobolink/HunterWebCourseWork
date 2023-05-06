@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTOs;
 using BLL.Exceptions;
-using BLL.Services.GenderServices;
-using BLL.Services.MethodServices;
-using BLL.Services.TypeServices;
 using DAL.Entities;
 using DAL.Repositories.OrderRepository;
 using Microsoft.Extensions.Logging;
@@ -16,8 +13,7 @@ namespace BLL.Services.OrderService
         private IMapper _mapper;
         private ILogger<OrderService> _logger;
 
-        public OrderService(IOrderRepository orderRepository, IMethodService methodService,
-            IGenderService genderService, ITypeService typeService, IMapper mapper, ILogger<OrderService> logger)
+        public OrderService(IOrderRepository orderRepository, IMapper mapper, ILogger<OrderService> logger)
         {
             _orderRepository = orderRepository;
 

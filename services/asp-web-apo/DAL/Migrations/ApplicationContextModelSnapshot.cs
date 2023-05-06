@@ -33,9 +33,6 @@ namespace DAL.Migrations
                     b.Property<int>("AnimalDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HuntingSeasonId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,8 +44,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AnimalDetailId");
-
-                    b.HasIndex("HuntingSeasonId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -77,26 +72,6 @@ namespace DAL.Migrations
                     b.ToTable("AnimalDetail");
                 });
 
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.Gender", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Genders");
-                });
-
             modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.HuntingSeason", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +79,9 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateEnd")
                         .HasColumnType("date");
@@ -115,6 +93,8 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
 
                     b.HasIndex("HuntingSeasonDetailId");
 
@@ -129,76 +109,13 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Age")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GenderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HuntingTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MethodOfHuntingId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TypeOfHuntingId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
-
-                    b.HasIndex("MethodOfHuntingId");
-
-                    b.HasIndex("TypeOfHuntingId");
 
                     b.ToTable("HuntingSeasonDetail");
-                });
-
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.MethodOfHunting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Methods");
-                });
-
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.TypeOfHunting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Types");
                 });
 
             modelBuilder.Entity("DAL.Entities.Messanger", b =>
@@ -314,12 +231,15 @@ namespace DAL.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RefreshToken")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique()
@@ -434,17 +354,17 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Entities.HuntingSeasonEntities.HuntingSeason", "HuntingSeason")
-                        .WithMany()
-                        .HasForeignKey("HuntingSeasonId");
-
                     b.Navigation("AnimalDetail");
-
-                    b.Navigation("HuntingSeason");
                 });
 
             modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.HuntingSeason", b =>
                 {
+                    b.HasOne("DAL.Entities.AnimalEntities.Animal", null)
+                        .WithMany("HuntingSeasons")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Entities.HuntingSeasonEntities.HuntingSeasonDetail", "HuntingSeasonDetail")
                         .WithMany()
                         .HasForeignKey("HuntingSeasonDetailId")
@@ -452,27 +372,6 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("HuntingSeasonDetail");
-                });
-
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.HuntingSeasonDetail", b =>
-                {
-                    b.HasOne("DAL.Entities.HuntingSeasonEntities.Gender", "Gender")
-                        .WithMany("HuntingSeasonDetails")
-                        .HasForeignKey("GenderId");
-
-                    b.HasOne("DAL.Entities.HuntingSeasonEntities.MethodOfHunting", "MethodOfHunting")
-                        .WithMany("HuntingSeasonDetails")
-                        .HasForeignKey("MethodOfHuntingId");
-
-                    b.HasOne("DAL.Entities.HuntingSeasonEntities.TypeOfHunting", "TypeOfHunting")
-                        .WithMany("HuntingSeasonDetails")
-                        .HasForeignKey("TypeOfHuntingId");
-
-                    b.Navigation("Gender");
-
-                    b.Navigation("MethodOfHunting");
-
-                    b.Navigation("TypeOfHunting");
                 });
 
             modelBuilder.Entity("DAL.Entities.Order", b =>
@@ -543,19 +442,9 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.Gender", b =>
+            modelBuilder.Entity("DAL.Entities.AnimalEntities.Animal", b =>
                 {
-                    b.Navigation("HuntingSeasonDetails");
-                });
-
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.MethodOfHunting", b =>
-                {
-                    b.Navigation("HuntingSeasonDetails");
-                });
-
-            modelBuilder.Entity("DAL.Entities.HuntingSeasonEntities.TypeOfHunting", b =>
-                {
-                    b.Navigation("HuntingSeasonDetails");
+                    b.Navigation("HuntingSeasons");
                 });
 
             modelBuilder.Entity("DAL.Entities.Messanger", b =>

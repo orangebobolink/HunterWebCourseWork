@@ -15,7 +15,11 @@ namespace BLL.Mappings
 
             CreateMap<User, RequestUserDTO>().ReverseMap();
 
-            CreateMap<UserDTO, ResponseUserDto>().ReverseMap();
+            CreateMap<User, ResponseUserDto>()
+                .ReverseMap();
+
+            CreateMap<UserDTO, ResponseUserDto>()
+                .ReverseMap();
 
             CreateMap<User, UserDetailDTO>()
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.UserDetail.FirstName))

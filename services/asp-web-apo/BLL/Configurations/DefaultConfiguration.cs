@@ -1,16 +1,12 @@
 ﻿using BLL.Mappings;
 using BLL.Services.AnimalServices;
 using BLL.Services.AuthServices;
-using BLL.Services.GenderServices;
 using BLL.Services.HuntingSeasonServices;
 using BLL.Services.MessangerServices;
-using BLL.Services.MethodServices;
 using BLL.Services.OrderService;
 using BLL.Services.TokeService;
-using BLL.Services.TypeServices;
 using BLL.Services.UserServices;
 using DAL.Configurations;
-using DAL.Repositories.HuntingSeasonRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,12 +25,9 @@ namespace BLL.Configurations
         {
             service.AddScoped<IAnimalService, AnimalService>();
             service.AddScoped<IAuthService, AuthService>();
-            service.AddScoped<IGenderService, GenderService>();
             service.AddScoped<IHuntingSeasonService, HuntingSeasonService>();
             service.AddScoped<IMessangerService, MessangerService>();
             service.AddScoped<IOrderService, OrderService>();
-            service.AddScoped<ITypeService, TypeService>();
-            service.AddScoped<IMethodService, MethodService>();
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IUserService, UserService>();
         }
@@ -43,13 +36,10 @@ namespace BLL.Configurations
         {
             service.AddAutoMapper(
                     typeof(AnimalProfile),
-                    typeof(GenderProfile),
                     typeof(HuntingOfSeasonProfile),
                     typeof(MessangerProfile),
-                    typeof(MethodOfHuntingProfile),
                     typeof(OrderProfile),
-                    typeof(TokenProfile),
-                    typeof(TypeOfHuntingProfile)
+                    typeof(TokenProfile)
                 );
         }
     }

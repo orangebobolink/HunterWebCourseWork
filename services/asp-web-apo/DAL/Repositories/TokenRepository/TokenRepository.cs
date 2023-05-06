@@ -1,6 +1,5 @@
 ﻿using DAL.Data;
 using DAL.Entities;
-using DAL.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.TokenRepository

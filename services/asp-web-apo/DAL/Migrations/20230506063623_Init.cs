@@ -26,16 +26,16 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genders",
+                name: "HuntingSeasonDetail",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genders", x => x.Id);
+                    table.PrimaryKey("PK_HuntingSeasonDetail", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,19 +49,6 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messangers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Methods",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Methods", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,19 +79,6 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Types",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Types", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -120,36 +94,24 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HuntingSeasonDetail",
+                name: "Animals",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeOfHuntingId = table.Column<int>(type: "int", nullable: true),
-                    MethodOfHuntingId = table.Column<int>(type: "int", nullable: true),
-                    HuntingTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GenderId = table.Column<int>(type: "int", nullable: true),
-                    Age = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnimalDetailId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HuntingSeasonDetail", x => x.Id);
+                    table.PrimaryKey("PK_Animals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HuntingSeasonDetail_Genders_GenderId",
-                        column: x => x.GenderId,
-                        principalTable: "Genders",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_HuntingSeasonDetail_Methods_MethodOfHuntingId",
-                        column: x => x.MethodOfHuntingId,
-                        principalTable: "Methods",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_HuntingSeasonDetail_Types_TypeOfHuntingId",
-                        column: x => x.TypeOfHuntingId,
-                        principalTable: "Types",
-                        principalColumn: "Id");
+                        name: "FK_Animals_AnimalDetail_AnimalDetailId",
+                        column: x => x.AnimalDetailId,
+                        principalTable: "AnimalDetail",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,7 +184,9 @@ namespace DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RefreshToken = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Expires = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,11 +233,18 @@ namespace DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateStart = table.Column<DateTime>(type: "date", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "date", nullable: false),
+                    AnimalId = table.Column<int>(type: "int", nullable: false),
                     HuntingSeasonDetailId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HuntingSeasons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HuntingSeasons_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HuntingSeasons_HuntingSeasonDetail_HuntingSeasonDetailId",
                         column: x => x.HuntingSeasonDetailId,
@@ -282,42 +253,10 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Animals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AnimalDetailId = table.Column<int>(type: "int", nullable: false),
-                    HuntingSeasonId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Animals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Animals_AnimalDetail_AnimalDetailId",
-                        column: x => x.AnimalDetailId,
-                        principalTable: "AnimalDetail",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Animals_HuntingSeasons_HuntingSeasonId",
-                        column: x => x.HuntingSeasonId,
-                        principalTable: "HuntingSeasons",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_AnimalDetailId",
                 table: "Animals",
                 column: "AnimalDetailId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Animals_HuntingSeasonId",
-                table: "Animals",
-                column: "HuntingSeasonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_Name",
@@ -326,25 +265,9 @@ namespace DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Genders_Name",
-                table: "Genders",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HuntingSeasonDetail_GenderId",
-                table: "HuntingSeasonDetail",
-                column: "GenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HuntingSeasonDetail_MethodOfHuntingId",
-                table: "HuntingSeasonDetail",
-                column: "MethodOfHuntingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HuntingSeasonDetail_TypeOfHuntingId",
-                table: "HuntingSeasonDetail",
-                column: "TypeOfHuntingId");
+                name: "IX_HuntingSeasons_AnimalId",
+                table: "HuntingSeasons",
+                column: "AnimalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HuntingSeasons_HuntingSeasonDetailId",
@@ -354,12 +277,6 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Messangers_Name",
                 table: "Messangers",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Methods_Name",
-                table: "Methods",
                 column: "Name",
                 unique: true);
 
@@ -390,15 +307,17 @@ namespace DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tokens_UserId",
+                name: "IX_Tokens_RefreshToken",
                 table: "Tokens",
-                column: "UserId");
+                column: "RefreshToken",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Types_Name",
-                table: "Types",
-                column: "Name",
-                unique: true);
+                name: "IX_Tokens_UserId",
+                table: "Tokens",
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserDetail_MessangerId",
@@ -428,7 +347,7 @@ namespace DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Animals");
+                name: "HuntingSeasons");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -443,10 +362,10 @@ namespace DAL.Migrations
                 name: "UserDetail");
 
             migrationBuilder.DropTable(
-                name: "AnimalDetail");
+                name: "Animals");
 
             migrationBuilder.DropTable(
-                name: "HuntingSeasons");
+                name: "HuntingSeasonDetail");
 
             migrationBuilder.DropTable(
                 name: "Status");
@@ -461,16 +380,7 @@ namespace DAL.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "HuntingSeasonDetail");
-
-            migrationBuilder.DropTable(
-                name: "Genders");
-
-            migrationBuilder.DropTable(
-                name: "Methods");
-
-            migrationBuilder.DropTable(
-                name: "Types");
+                name: "AnimalDetail");
         }
     }
 }
