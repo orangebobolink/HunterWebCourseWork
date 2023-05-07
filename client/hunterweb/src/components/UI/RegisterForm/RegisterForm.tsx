@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Checkbox, Label, TextInput} from 'flowbite-react';
+import {Context} from '../../../index';
+import {observer} from 'mobx-react-lite';
 
 const RegisterForm = () => {
+    const {store} = useContext(Context)
+
     return (
         <div className="container mx-auto w-1/3">
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={
+                () => {
+                   //store.registration()
+                }
+            }>
                 <div>
                     <div className="mb-2 block">
                         <Label
@@ -69,4 +77,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default observer(RegisterForm);

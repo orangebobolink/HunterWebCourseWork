@@ -4,12 +4,15 @@ import DefaultInput from '../input/DefaultInput';
 
 interface Props {
     onChange?:(e: any) => void,
-    value?:string,
+    value?:string | number | boolean,
     id:string,
     type:string,
     placeholder?:string,
     required:boolean,
-    labelValue:string
+    labelValue:string,
+    min?:number,
+    max?:number,
+    readonly?:boolean
 }
 
 const InputField:FC<Props> = ({
@@ -18,8 +21,11 @@ const InputField:FC<Props> = ({
                                 id,
                                 type,
                                 placeholder,
-                                  required,
-                                labelValue
+                                required,
+                                labelValue,
+                                min,
+                                max,
+                                  readonly
                               }) => {
     return (
         <div>
@@ -36,6 +42,9 @@ const InputField:FC<Props> = ({
                 type={type}
                 placeholder={placeholder}
                 required={required}
+                min={min}
+                max={max}
+                readOnly={readonly}
             />
         </div>
     );

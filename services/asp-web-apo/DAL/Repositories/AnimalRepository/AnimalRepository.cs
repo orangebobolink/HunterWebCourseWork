@@ -35,6 +35,8 @@ namespace DAL.Repositories.AnimalRepository
 
         public async Task<Animal?> GetByNameAsync(string name)
             => await _dbContext.Animals
+            .Include(a => a.AnimalDetail)
+            .Include(a => a.HuntingSeasons)
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Name == name);
     }

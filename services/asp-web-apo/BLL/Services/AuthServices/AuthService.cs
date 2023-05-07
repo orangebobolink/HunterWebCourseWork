@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
 using BLL.Exceptions;
 using BLL.Services.TokeService;
-using DAL.Entities;
 using DAL.Entities.UserEntities;
 using DAL.Repositories.RoleRepository;
 using DAL.Repositories.UserRepository;
@@ -13,6 +11,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BLL.Exceptions;
+using Azure.Core;
 
 namespace BLL.Services.AuthServices
 {
@@ -25,10 +25,10 @@ namespace BLL.Services.AuthServices
         private ITokenService _tokenService;
         private IRoleRepository _roleRepository; // TODO: поменять на сервер
 
-        public AuthService(IUserRepository userRepository, IRoleRepository roleRepository, IMapper mapper, ILogger<AuthService> logger, ITokenService tokenService)
+        public AuthService(IUserRepository userService, IRoleRepository roleRepository, IMapper mapper, ILogger<AuthService> logger, ITokenService tokenService)
         {
             _roleRepository = roleRepository;
-            _userRepository = userRepository;
+            _userRepository = userService;
             _mapper = mapper;
             _logger = logger;
             _tokenService = tokenService;
@@ -146,28 +146,62 @@ namespace BLL.Services.AuthServices
 
         public async Task<ResponseUserDto> Refresh(string refreshToken)
         {
-            await _tokenService.RemoveAsync(new RefreshTokenDTO { RefreshToken = refreshToken });
-
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(refreshToken);
 
             var userEmail = token.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             var user = await _userRepository.GetByEmailAsync(userEmail);
 
+            if(user is null)
+            {
+                throw new NotFoundException(userEmail);
+            }
+
+            await _tokenService.RemoveAsync(new RefreshTokenDTO
+            {
+                RefreshToken = refreshToken,
+                UserId = user.Id
+            });
+
             var newRefreshToken = _tokenService.CreateRefreshToken(userEmail);
             newRefreshToken.UserId = user.Id;
 
             await _tokenService.AddAsync(newRefreshToken);
 
-            var accessToken = _tokenService.CreateAccessToken(user);
+            var userDto = _mapper.Map<UserDTO>(user);
+
+            var accessToken = _tokenService.CreateAccessToken(userDto);
 
             var mapperModel = _mapper.Map<ResponseUserDto>(user);
+
             mapperModel.RefreshToken = newRefreshToken.RefreshToken;
             mapperModel.Created = newRefreshToken.Created;
             mapperModel.Expires = newRefreshToken.Expires;
             mapperModel.AccessToken = accessToken;
 
             return mapperModel;
+        }
+
+        public async Task<bool> CheckToken(string refreshToken)
+        {
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(refreshToken);
+
+            var userEmail = token.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            var user = await _userRepository.GetByEmailAsync(userEmail);
+
+            var tokenValid = await _tokenService.FindTokeByUserId(user!.Id);
+
+            if(tokenValid.RefreshToken == string.Empty)
+            {
+                throw new Exception();
+            }
+
+            var validate = await _tokenService.ValidateRefreshToken(refreshToken);
+
+            return validate;
         }
     }
 }

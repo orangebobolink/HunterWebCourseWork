@@ -5,7 +5,7 @@ import "./LoginForm.module.css"
 import cl from './LoginForm.module.css';
 import DefaultInput from "../input/DefaultInput"
 import DefaultButton from '../button/DefaultButton/DefaultButton';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import {Button, Label, TextInput} from 'flowbite-react';
 import LinkButton from '../button/LinkButton/LinkButton';
 import InputField from '../InputField/InputField';
@@ -14,13 +14,14 @@ const LoginForm: FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState('');
     const {store} = useContext(Context);
+    const navigate = useNavigate();
+
+    function handleRef() {
+        return navigate(`/register`);
+    }
 
     if (store.isAuth) {
         return <Navigate to='/'/>;
-    }
-
-    const handleRef = () => {
-        return  <Navigate to='/register'/>;
     }
 
 
@@ -43,10 +44,7 @@ const LoginForm: FC = () => {
                 />
 
                 <Button className='w-2/3 self-center' type="submit">Войти</Button>
-                <Button className='w-2/3 self-center' >Регистрация</Button>
-                <LinkButton to="/register">
-                    Регистрация
-                </LinkButton>
+                <Button className='w-2/3 self-center' onClick={handleRef} >Регистрация</Button>
             </form>
         </div>
 );

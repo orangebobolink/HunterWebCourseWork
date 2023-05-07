@@ -1,13 +1,12 @@
 ﻿using DAL.Data;
 using DAL.Repositories.AnimalRepository;
-using DAL.Repositories.GenderRepository;
+using DAL.Repositories.FeedbackRepository;
 using DAL.Repositories.HuntingSeasonRepository;
 using DAL.Repositories.MessangerRepository;
-using DAL.Repositories.MethodRepository;
 using DAL.Repositories.OrderRepository;
 using DAL.Repositories.RoleRepository;
+using DAL.Repositories.StatusRepository;
 using DAL.Repositories.TokenRepository;
-using DAL.Repositories.TypeRepository;
 using DAL.Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,14 +33,13 @@ namespace DAL.Configurations
         {
             service.AddScoped<IAnimalRepository, AnimalRepository>();
             service.AddScoped<IRoleRepository, RoleRepository>();
-            service.AddScoped<IGenderRepository, GenderRepository>();
-            service.AddScoped<IMethodRepository, MethodRepository>();
-            service.AddScoped<ITypeRepository, TypeRepository>();
             service.AddScoped<IHuntingSeasonRepository, HuntingSeasonReposiptoty>();
             service.AddScoped<IMessangerRepository, MessangerReposiotry>();
             service.AddScoped<IOrderRepository, OrderRepository>();
             service.AddScoped<ITokenRepository, TokenRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
+            service.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            service.AddScoped<IStatusRepository, StatusRepository>();
         }
     }
 }

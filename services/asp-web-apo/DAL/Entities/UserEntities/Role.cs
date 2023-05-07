@@ -6,5 +6,10 @@
         public string Name { get; set; } = string.Empty;
         public List<User> Users { get; set; } = new();
         public List<RoleUser> RoleUsers { get; set; } = new();
+
+        public override string? ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -7,7 +7,12 @@ import $api, {API_URL} from '../http';
 
 
 export default class Store {
-    user = {} as IUser;
+    user = {
+        email:"",
+        roles: [
+            ""
+        ]
+    } as IUser;
     isAuth = false;
     isLoading = false;
     isAdmin = false;
@@ -36,7 +41,7 @@ export default class Store {
         try {
             const response = await AuthService.login(email, password);
             console.log(response);
-
+            debugger
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
 

@@ -9,7 +9,6 @@ namespace DAL.Entities.AnimalEntities
         public string ImageUrl { get; set; } = string.Empty;
         public int AnimalDetailId { get; set; }
         public AnimalDetail? AnimalDetail { get; set; }
-        public int? HuntingSeasonId { get; set; }
-        public HuntingSeason? HuntingSeason { get; set; }
+        public List<HuntingSeason> HuntingSeasons { get; set; } = new();
     }
 }

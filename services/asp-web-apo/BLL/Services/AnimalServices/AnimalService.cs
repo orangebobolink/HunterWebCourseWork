@@ -73,6 +73,22 @@ namespace BLL.Services.AnimalServices
             return mapperModel;
         }
 
+        public async Task<AnimalDetailDTO?> GetByNameAsync(string name)
+        {
+            var animalChecked = await _animalRepository.GetByNameAsync(name);
+
+            if(animalChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("There is not data yet");
+            }
+
+            var mapperModel = _mapper.Map<AnimalDetailDTO>(animalChecked);
+
+            return mapperModel;
+        }
+
         public async Task<AnimalDetailDTO> RemoveAsync(AnimalDetailDTO item)
         {
             var mapperModel = _mapper.Map<Animal>(item);

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
 using BLL.Exceptions;
-using BLL.Services.TokeService;
+using DAL.Entities.UserEntities;
 using DAL.Repositories.UserRepository;
 using Microsoft.Extensions.Logging;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace BLL.Services.UserServices
 {
@@ -19,9 +16,42 @@ namespace BLL.Services.UserServices
         public UserService(IUserRepository userRepository, IMapper mapper, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
-            _tokenService = tokenService;
             _mapper = mapper;
             _logger = logger;
+        }
+
+        public async Task<UserDetailDTO> AddAsync(UserDetailDTO item)
+        {
+            var userChecked = await _userRepository.GetByEmailAsync(item.Email);
+
+            if(userChecked is not null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("");
+            }
+
+            var mapperModel = _mapper.Map<User>(item);
+
+            _userRepository.Add(mapperModel);
+            await _userRepository.SaveChangesAsync();
+
+            return item;
+        }
+
+        public async Task<IEnumerable<UserDetailDTO>> GetAllAsync()
+        {
+            var userChecked = await _userRepository.GetAllAsync();
+
+            if(userChecked is null)
+            {
+                _logger.LogError("");
+                throw new NotFoundException("");
+            }
+
+            var mapperModel = _mapper.Map<IEnumerable<UserDetailDTO>>(userChecked);
+
+            return mapperModel;
         }
 
         public async Task<UserDTO> GetByEmailAsync(string email)
@@ -37,6 +67,46 @@ namespace BLL.Services.UserServices
             var mapperModel = _mapper.Map<UserDTO>(userChecked);
 
             return mapperModel;
+        }
+
+        public async Task<UserDetailDTO> GetByEmailIncludeDetailsAsync(string email)
+        {
+            var userChecked = await _userRepository.GetByEmailAsync(email);
+
+            if(userChecked is null)
+            {
+                _logger.LogError("");
+                throw new NotFoundException("");
+            }
+
+            var mapperModel = _mapper.Map<UserDetailDTO>(userChecked);
+
+            return mapperModel;
+        }
+
+        public async Task<UserDetailDTO?> GetByIdAsync(int id)
+        {
+            var userChecked = await _userRepository.GetByIdIncludeDetailAsync(id);
+
+            if(userChecked is null)
+            {
+                _logger.LogError("");
+                throw new NotFoundException("");
+            }
+
+            var mapperModel = _mapper.Map<UserDetailDTO>(userChecked);
+
+            return mapperModel;
+        }
+
+        public Task<UserDetailDTO> RemoveAsync(UserDetailDTO item)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<UserDetailDTO> UpdateAsync(UserDetailDTO item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

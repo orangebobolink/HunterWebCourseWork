@@ -8,7 +8,9 @@ namespace BLL.Mappings
     {
         public OrderProfile()
         {
-            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>()
+                 .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status!.Name))
+                .ReverseMap();
         }
     }
 }

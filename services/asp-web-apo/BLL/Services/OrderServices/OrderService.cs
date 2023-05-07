@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using BLL.DTOs;
 using BLL.Exceptions;
-using BLL.Services.GenderServices;
-using BLL.Services.MethodServices;
-using BLL.Services.TypeServices;
+using BLL.Services.UserServices;
 using DAL.Entities;
 using DAL.Repositories.OrderRepository;
+using DAL.Repositories.StatusRepository;
 using Microsoft.Extensions.Logging;
 
 namespace BLL.Services.OrderService
@@ -13,31 +12,41 @@ namespace BLL.Services.OrderService
     internal class OrderService : IOrderService
     {
         private IOrderRepository _orderRepository;
+        private IStatusRepository _statusRepository;
+        private IUserService _userService;
         private IMapper _mapper;
         private ILogger<OrderService> _logger;
 
-        public OrderService(IOrderRepository orderRepository, IMethodService methodService,
-            IGenderService genderService, ITypeService typeService, IMapper mapper, ILogger<OrderService> logger)
+        public OrderService(IOrderRepository orderRepository, IStatusRepository statusRepository, IUserService userService, IMapper mapper, ILogger<OrderService> logger)
         {
             _orderRepository = orderRepository;
-
+            _statusRepository = statusRepository;
+            _userService = userService;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<OrderDTO> AddAsync(OrderDTO item)
         {
-            var orderChecked = await _orderRepository.GetAllByPredict(o => (o.Email == item.Email) &&
-            (item.FilingDate - o.FilingDate).TotalDays < 1);
+            var orderChecked = await _orderRepository.GetAllByPredict(o =>
+            (o.User!.Email == item.UserEmail) &&
+            ((item.FilingDate - o.FilingDate).TotalDays < 1));
 
-            if(orderChecked is not null)
+            if(orderChecked.Count() != 0)
             {
                 _logger.LogError("");
 
                 throw new NotFoundException("This email has already submitted an application recently");
             }
 
+            var user = await _userService.GetByEmailAsync(item.UserEmail);
+            var status = await _statusRepository.GetByNameAsync("todo");
             var mapperModel = _mapper.Map<Order>(item);
+
+            mapperModel.UserId = user.Id;
+            mapperModel.User = null;
+            mapperModel.StatusId = status!.Id;
+            mapperModel.Status = null;
 
             _orderRepository.Add(mapperModel);
             await _orderRepository.SaveChangesAsync();

@@ -26,10 +26,10 @@ namespace AspWebApi.Controllers
             return Ok(animals);
         }
 
-        [HttpGet("get/:id")]
-        public async Task<ActionResult<List<AnimalDTO>>> GetAnimalById(int id)
+        [HttpGet("get/:name")]
+        public async Task<ActionResult<List<AnimalDTO>>> GetAnimalByName(string name)
         {
-            var animal = await _animalService.GetByIdAsync(id);
+            var animal = await _animalService.GetByNameAsync(name);
 
             if(animal is null)
                 return BadRequest(animal);
