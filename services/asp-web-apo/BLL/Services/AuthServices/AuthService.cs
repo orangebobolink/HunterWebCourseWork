@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using BLL.Exceptions;
+using Azure.Core;
 
 namespace BLL.Services.AuthServices
 {
@@ -145,8 +146,6 @@ namespace BLL.Services.AuthServices
 
         public async Task<ResponseUserDto> Refresh(string refreshToken)
         {
-            await _tokenService.RemoveAsync(new RefreshTokenDTO { RefreshToken = refreshToken });
-
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(refreshToken);
 
@@ -157,6 +156,12 @@ namespace BLL.Services.AuthServices
             {
                 throw new NotFoundException(userEmail);
             }
+
+            await _tokenService.RemoveAsync(new RefreshTokenDTO
+            {
+                RefreshToken = refreshToken,
+                UserId = user.Id
+            });
 
             var newRefreshToken = _tokenService.CreateRefreshToken(userEmail);
             newRefreshToken.UserId = user.Id;
@@ -175,6 +180,28 @@ namespace BLL.Services.AuthServices
             mapperModel.AccessToken = accessToken;
 
             return mapperModel;
+        }
+
+        public async Task<bool> CheckToken(string refreshToken)
+        {
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(refreshToken);
+
+            var userEmail = token.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            var user = await _userRepository.GetByEmailAsync(userEmail);
+
+            var tokenValid = await _tokenService.FindTokeByUserId(user!.Id);
+
+            if(tokenValid.RefreshToken == string.Empty)
+            {
+                throw new Exception();
+            }
+
+            var validate = await _tokenService.ValidateRefreshToken(refreshToken);
+
+            return validate;
         }
     }
 }

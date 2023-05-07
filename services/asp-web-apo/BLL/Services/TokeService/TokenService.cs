@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BLL.DTOs.TokenDTOs;
 using BLL.DTOs.UserDTOs;
+using BLL.Exceptions;
 using DAL.Entities;
 using DAL.Repositories.TokenRepository;
+using DAL.Repositories.UserRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -79,7 +81,7 @@ namespace BLL.Services.TokeService
 
         public async Task<RefreshTokenDTO> RemoveAsync(RefreshTokenDTO refreshToken)
         {
-            var tokenChecked = await _tokenRepository.GetByTokenAsync(refreshToken.RefreshToken);
+            var tokenChecked = await _tokenRepository.GetByUserIdAsync(refreshToken.UserId);
 
             if(tokenChecked is null)
             {

@@ -3,6 +3,8 @@ using BLL.DTOs.UserDTOs;
 using BLL.Services.AuthServices;
 using BLL.Services.TokeService;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace AspWebApi.Controllers
 {
@@ -49,7 +51,7 @@ namespace AspWebApi.Controllers
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
-            var validate = await _tokenService.ValidateRefreshToken(refreshToken);
+            var validate = await _authService.CheckToken(refreshToken!);
 
             if(!validate)
                 Unauthorized();
@@ -83,8 +85,7 @@ namespace AspWebApi.Controllers
             var cookieOptions = new CookieOptions()
             {
                 HttpOnly = true,
-                Expires = refreshToken.Expires,
-                SameSite = SameSiteMode.Lax
+                Expires = refreshToken.Expires
             };
 
             Response.Cookies.Append("refreshToken", refreshToken.RefreshToken, cookieOptions);
