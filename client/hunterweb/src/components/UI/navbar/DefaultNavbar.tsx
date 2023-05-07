@@ -3,18 +3,23 @@ import {Avatar, Dropdown, Navbar} from 'flowbite-react';
 import logo from "../../../images/logo.jpg"
 import {observer} from 'mobx-react-lite';
 import {Context} from '../../../index';
-import DefaultButton from '../button/DefaultButton/DefaultButton';
 import LinkButton from '../button/LinkButton/LinkButton';
+import {useNavigate} from 'react-router-dom';
 
 const DefaultNavbar = () => {
     const {store} = useContext(Context);
+    const navigate = useNavigate()
+
+    const handleRef = () => {
+        navigate("/")
+    }
 
     return (
         <Navbar
             fluid={true}
             rounded={true}
         >
-            <Navbar.Brand href="https://flowbite.com/">
+            <Navbar.Brand onClick={handleRef}>
                 <img
                     src={logo}
                     className="mr-3 h-6 sm:h-9"
@@ -68,13 +73,13 @@ const DefaultNavbar = () => {
                 <Navbar.Link href="/animals">
                     Трофеи
                 </Navbar.Link>
-                <Navbar.Link href="/navbars">
+                <Navbar.Link href="/order">
                     Оформить заказ
                 </Navbar.Link>
-                <Navbar.Link href="/navbars">
+                <Navbar.Link href="/feedback">
                     Отзывы
                 </Navbar.Link>
-                <Navbar.Link href="/navbars">
+                <Navbar.Link href="/contacts">
                     Контакты
                 </Navbar.Link>
             </Navbar.Collapse>

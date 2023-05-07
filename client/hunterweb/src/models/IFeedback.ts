@@ -1,7 +1,8 @@
-export interface IAnimalDetail {
+export interface IFeedback {
     id:number,
     userEmail: string;
-    userName: string;
+    userFirstName: string;
     content: string;
     mark: number;
+    dateCreate: Date;
 }
