@@ -1,6 +1,7 @@
 ﻿using BLL.Mappings;
 using BLL.Services.AnimalServices;
 using BLL.Services.AuthServices;
+using BLL.Services.FeedbackServices;
 using BLL.Services.HuntingSeasonServices;
 using BLL.Services.MessangerServices;
 using BLL.Services.OrderService;
@@ -30,6 +31,7 @@ namespace BLL.Configurations
             service.AddScoped<IOrderService, OrderService>();
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IFeedbackService, FeedbackService>();
         }
 
         private static void ConfigurationAutoMapper(this IServiceCollection service)
@@ -39,7 +41,8 @@ namespace BLL.Configurations
                     typeof(HuntingOfSeasonProfile),
                     typeof(MessangerProfile),
                     typeof(OrderProfile),
-                    typeof(TokenProfile)
+                    typeof(TokenProfile),
+                    typeof(FeedbackProfile)
                 );
         }
     }
