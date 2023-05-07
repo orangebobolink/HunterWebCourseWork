@@ -14,10 +14,9 @@ namespace DAL.Data
         public DbSet<Token> Tokens { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Messanger> Messangers { get; set; }
-        public DbSet<Gender> Genders { get; set; }
-        public DbSet<MethodOfHunting> Methods { get; set; }
-        public DbSet<TypeOfHunting> Types { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Status> Statuses { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -41,18 +40,6 @@ namespace DAL.Data
             modelBuilder.Entity<Animal>()
                .HasIndex(animal => animal.Name)
                .IsUnique();
-
-            modelBuilder.Entity<Gender>()
-               .HasIndex(gender => gender.Name)
-               .IsUnique();
-
-            modelBuilder.Entity<MethodOfHunting>()
-              .HasIndex(method => method.Name)
-              .IsUnique();
-
-            modelBuilder.Entity<TypeOfHunting>()
-              .HasIndex(type => type.Name)
-              .IsUnique();
 
             modelBuilder.Entity<Messanger>()
               .HasIndex(messanger => messanger.Name)

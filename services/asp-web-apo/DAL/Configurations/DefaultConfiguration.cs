@@ -1,9 +1,11 @@
 ﻿using DAL.Data;
 using DAL.Repositories.AnimalRepository;
+using DAL.Repositories.FeedbackRepository;
 using DAL.Repositories.HuntingSeasonRepository;
 using DAL.Repositories.MessangerRepository;
 using DAL.Repositories.OrderRepository;
 using DAL.Repositories.RoleRepository;
+using DAL.Repositories.StatusRepository;
 using DAL.Repositories.TokenRepository;
 using DAL.Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,8 @@ namespace DAL.Configurations
             service.AddScoped<IOrderRepository, OrderRepository>();
             service.AddScoped<ITokenRepository, TokenRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
+            service.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            service.AddScoped<IStatusRepository, StatusRepository>();
         }
     }
 }

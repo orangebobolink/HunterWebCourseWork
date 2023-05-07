@@ -10,12 +10,13 @@ namespace BLL.Mappings
         public UserProfile()
         {
             CreateMap<User, UserDTO>()
-                .ForMember(dest => dest.Roles, opt => opt.MapFrom<UserRoleResolver>())
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom<UserRoleResolver<UserDTO>>())
                 .ReverseMap();
 
             CreateMap<User, RequestUserDTO>().ReverseMap();
 
             CreateMap<User, ResponseUserDto>()
+                 .ForMember(dest => dest.Roles, opt => opt.MapFrom<UserRoleResolver<ResponseUserDto>>())
                 .ReverseMap();
 
             CreateMap<UserDTO, ResponseUserDto>()
