@@ -6,6 +6,7 @@ namespace DAL.Entities.AnimalEntities
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string EnglishName { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
         public int AnimalDetailId { get; set; }
         public AnimalDetail? AnimalDetail { get; set; }
