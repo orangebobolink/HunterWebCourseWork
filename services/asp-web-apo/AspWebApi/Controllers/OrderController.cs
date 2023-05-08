@@ -23,5 +23,13 @@ namespace AspWebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ResponseUserDto>> GetAll()
+        {
+            var response = await _orderService.GetAllAsync();
+
+            return Ok(response);
+        }
     }
 }

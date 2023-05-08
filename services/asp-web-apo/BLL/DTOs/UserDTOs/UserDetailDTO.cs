@@ -8,7 +8,7 @@ namespace BLL.DTOs.UserDTOs
         public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public int? MessangerId { get; set; }
-        public Messanger? Messanger { get; set; }
+        public string MessangerName { get; set; } = string.Empty;
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }

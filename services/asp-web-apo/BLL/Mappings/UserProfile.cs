@@ -23,9 +23,10 @@ namespace BLL.Mappings
                 .ReverseMap();
 
             CreateMap<User, UserDetailDTO>()
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.UserDetail.FirstName))
-                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserDetail.Phone))
-                .ForMember(dest => dest.Messanger, opt => opt.MapFrom(src => src.UserDetail.Messanger.Name))
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom<UserRoleResolver<UserDetailDTO>>())
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.UserDetail!.FirstName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserDetail!.Phone))
+                .ForMember(dest => dest.MessangerName, opt => opt.MapFrom(src => src.UserDetail!.Messanger!.Name))
                 .ReverseMap();
 
             CreateMap<User, RegisterUserDTO>()

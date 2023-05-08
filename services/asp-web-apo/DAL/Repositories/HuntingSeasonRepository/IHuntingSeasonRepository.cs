@@ -7,5 +7,6 @@ namespace DAL.Repositories.HuntingSeasonRepository
     {
         public Task<IEnumerable<HuntingSeason>> GetAllWithDetailsAsync();
         public Task<HuntingSeason?> GetByIdWithDetailsAsync(int id);
+        public Task<IEnumerable<HuntingSeason>> GetAllByAnimalIdAsync(int animalId);
     }
 }

@@ -8,6 +8,7 @@ namespace DAL.Entities
         public DateTime FilingDate { get; set; } = DateTime.Now;
         public int? UserId { get; set; }
         public User? User { get; set; }
+        public string AnimalInfo { get; set; } = string.Empty;
         public int NumberHunters { get; set; }
         public int CountDates { get; set; }
         public bool IncludeHouse { get; set; } = false;

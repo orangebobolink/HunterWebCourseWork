@@ -21,6 +21,13 @@ namespace DAL.Repositories.HuntingSeasonRepository
             .AsNoTracking()
             .ToListAsync();
 
+        public async Task<IEnumerable<HuntingSeason>> GetAllByAnimalIdAsync(int animalId)
+            => await _dbContext.HuntingSeasons
+            .Include(h => h.HuntingSeasonDetail)
+            .AsNoTracking()
+            .Where(h => h.AnimalId == animalId)
+            .ToListAsync();
+
         public async override Task<HuntingSeason?> GetByIdAsync(int id)
             => await _dbContext.HuntingSeasons
             .AsNoTracking()

@@ -22,6 +22,12 @@ namespace DAL.Repositories.AnimalRepository
             .AsNoTracking()
             .ToListAsync();
 
+        public async Task<Animal?> GetByEnglishNameAsync(string name)
+            => await _dbContext.Animals
+                .Include(a => a.AnimalDetail)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.EnglishName == name);
+
         public async override Task<Animal?> GetByIdAsync(int id)
             => await _dbContext.Animals
             .AsNoTracking()

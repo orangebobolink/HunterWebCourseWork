@@ -7,6 +7,7 @@ namespace BLL.DTOs
         public int Id { get; set; }
         public string UserEmail { get; set; } = string.Empty;
         public DateTime FilingDate { get; set; } = DateTime.Now;
+        public string AnimalInfo { get; set; } = string.Empty;
         public int NumberHunters { get; set; }
         public int CountDates { get; set; }
         public bool IncludeHouse { get; set; }
