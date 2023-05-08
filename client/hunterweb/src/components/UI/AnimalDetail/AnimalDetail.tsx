@@ -4,9 +4,9 @@ import AnimalService from '../../../services/AnimalService';
 import {IAnimalDetail} from '../../../models/IAnimalDetail';
 import {Button, Checkbox, Label, Modal, Spinner, Table, TextInput} from 'flowbite-react';
 import {Context} from '../../../index';
-import ModalHuntingSeason from '../ModalHuntingSeason/ModalHuntingSeason';
+import ModalHuntingSeason from '../Modal/ModalHuntingSeason/ModalHuntingSeason';
 import {IHuntingSeason} from '../../../models/IHuntingSeason';
-import ModalUpdateAnimal from '../ModalUpdateAnimal/ModalUpdateAnimal';
+import ModalUpdateAnimal from '../Modal/ModalUpdateAnimal/ModalUpdateAnimal';
 
 const AnimalDetail = () => {
     const {name} = useParams() as any

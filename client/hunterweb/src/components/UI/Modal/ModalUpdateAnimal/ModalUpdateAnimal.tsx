@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import {Button, Label, Modal, Textarea} from 'flowbite-react';
-import InputField from '../InputField/InputField';
-import {IAnimalDetail} from '../../../models/IAnimalDetail';
+import InputField from '../../InputField/InputField';
+import {IAnimalDetail} from '../../../../models/IAnimalDetail';
 
 interface Props{
     showModal:boolean,

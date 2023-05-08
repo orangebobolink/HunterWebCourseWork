@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Button, Label, Modal, Textarea} from 'flowbite-react';
-import InputField from '../InputField/InputField';
+import InputField from '../../InputField/InputField';
 
 interface Props{
     showModal:boolean,
