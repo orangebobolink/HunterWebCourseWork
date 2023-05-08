@@ -15,7 +15,7 @@ namespace AspWebApi.Controllers
             _animalService = animalService;
         }
 
-        [HttpGet("get")]
+        [HttpGet]
         public async Task<ActionResult<List<AnimalDTO>>> GetAllAnimalAsync()
         {
             var animals = await _animalService.GetAllAsync();
@@ -26,10 +26,28 @@ namespace AspWebApi.Controllers
             return Ok(animals);
         }
 
-        [HttpGet("get/:name")]
-        public async Task<ActionResult<List<AnimalDTO>>> GetAnimalByName(string name)
+        [HttpGet("name")]
+        public async Task<ActionResult<AnimalDetailDTO>> GetAnimalByName(string name)
         {
-            var animal = await _animalService.GetByNameAsync(name);
+            var animal = await _animalService.GetByEnglishNameAsync(name);
+
+            if(animal is null)
+                return BadRequest(animal);
+
+            return Ok(animal);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<AnimalDetailDTO>> CreateAnimal(string name, string description, string imageUrl)
+        {
+            var animalDto = new AnimalDetailDTO()
+            {
+                Name = name,
+                Description = description,
+                ImageUrl = imageUrl
+            };
+
+            var animal = await _animalService.AddAsync(animalDto);
 
             if(animal is null)
                 return BadRequest(animal);

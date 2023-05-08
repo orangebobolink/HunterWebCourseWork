@@ -7,5 +7,6 @@ namespace DAL.Repositories.AnimalRepository
     {
         public Task<IEnumerable<Animal>> GetAllWithDetailsAsync();
         public Task<Animal?> GetByIdWithDetailsAsync(int id);
+        public Task<Animal?> GetByEnglishNameAsync(string name);
     }
 }

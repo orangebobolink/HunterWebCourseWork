@@ -21,7 +21,7 @@ const Feedback:FC<Props> = ({feedback}) => {
 
                     <div className="space-y-0.5 font-medium dark:text-white text-left">
                         <div>{feedback.userFirstName}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400"> {feedback.dateCreate.toString()}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400"> {feedback.dateCreate!.toString()}</div>
                     </div>
             </figcaption>
         </div>

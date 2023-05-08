@@ -10,6 +10,11 @@ import AnimalCreatePage from '../pages/AnimalCreatePage';
 import FeedbackPage from '../pages/FeedbackPage';
 import {Context} from '../index';
 import OrderPage from '../pages/OrderPage';
+import ContactPage from '../pages/ContactPage';
+import ManageUserPage from '../pages/ManageUserPage';
+import ManageOrderPage from '../pages/ManageOrderPage';
+import SettingPage from '../pages/SettingPage';
+import InformationUserPage from '../pages/InformationUserPage';
 
 const AppRoute = () => {
     const {store} = useContext(Context)
@@ -26,10 +31,20 @@ const AppRoute = () => {
                    element={<RegisterPage/>}/>
             <Route path='/animalcreate'
                    element={<AnimalCreatePage/>}/>
+            <Route path='/setting'
+                   element={<SettingPage/>}/>
+            <Route path='/information'
+                   element={<InformationUserPage/>}/>
+            <Route path='/manageuser'
+                   element={<ManageUserPage/>}/>
+            <Route path='/manageorder'
+                   element={<ManageOrderPage/>}/>
             <Route path='/animals/:name'
                    element={<AnimalDetail/>}/>
             <Route path='/animals'
                    element={<AnimalPage/>}/>
+            <Route path='/contacts'
+                   element={<ContactPage/>}/>
             <Route path='/'
                    element={<HomePage/>}/>
 

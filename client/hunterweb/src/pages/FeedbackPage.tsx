@@ -48,15 +48,15 @@ const FeedbackPage = () => {
                     </div>
                 </div>
 
-                {
-                    store.user.roles.includes("user")
-                    ?
-                    <CreateFeedbackForm/>
-                    :
-                    <div>
-                        <p>Чтобы оставить отзыв, вам требуется зарегистрироваться</p>
-                    </div>
-                }
+                    {
+                        store.user.roles.includes("user")
+                        ?
+                        <CreateFeedbackForm/>
+                        :
+                        <div>
+                            <p>Чтобы оставить отзыв, вам требуется зарегистрироваться</p>
+                        </div>
+                    }
 
             </div>
         </div>

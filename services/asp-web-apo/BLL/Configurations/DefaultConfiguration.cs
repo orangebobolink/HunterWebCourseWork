@@ -24,9 +24,9 @@ namespace BLL.Configurations
 
         private static void ConfigurationServices(this IServiceCollection service)
         {
+            service.AddScoped<IHuntingSeasonService, HuntingSeasonService>();
             service.AddScoped<IAnimalService, AnimalService>();
             service.AddScoped<IAuthService, AuthService>();
-            service.AddScoped<IHuntingSeasonService, HuntingSeasonService>();
             service.AddScoped<IMessangerService, MessangerService>();
             service.AddScoped<IOrderService, OrderService>();
             service.AddScoped<ITokenService, TokenService>();

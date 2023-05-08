@@ -21,6 +21,7 @@ const AnimalList: FC<Props> = ({animals}) => {
                     <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
                         {animals.map((animal) => (
                             <AnimalPost name={animal.name}
+                                        englishName={animal.englishName}
                                         href={animal.imageUrl}
                                         imageSrc={animal.imageUrl}
                                         imageAlt={animal.name}

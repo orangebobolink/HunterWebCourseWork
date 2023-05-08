@@ -4,7 +4,7 @@ import DefaultInput from '../input/DefaultInput';
 
 interface Props {
     onChange?:(e: any) => void,
-    value?:string | number | boolean,
+    value?:string | number | boolean | Date | null,
     id:string,
     type:string,
     placeholder?:string,

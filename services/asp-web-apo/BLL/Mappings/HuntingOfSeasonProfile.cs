@@ -8,7 +8,9 @@ namespace BLL.Mappings
     {
         public HuntingOfSeasonProfile()
         {
-            CreateMap<HuntingSeason, HuntingSeasonDTO>().ReverseMap();
+            CreateMap<HuntingSeason, HuntingSeasonDTO>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.HuntingSeasonDetail!.Description))
+                .ReverseMap();
         }
     }
 }

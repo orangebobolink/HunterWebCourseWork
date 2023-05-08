@@ -1,8 +1,8 @@
 export interface IFeedback {
-    id:number,
+    id?:number,
     userEmail: string;
-    userFirstName: string;
+    userFirstName?: string;
     content: string;
     mark: number;
-    dateCreate: Date;
+    dateCreate?: Date;
 }

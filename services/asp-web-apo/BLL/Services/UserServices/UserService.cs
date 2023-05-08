@@ -41,7 +41,7 @@ namespace BLL.Services.UserServices
 
         public async Task<IEnumerable<UserDetailDTO>> GetAllAsync()
         {
-            var userChecked = await _userRepository.GetAllAsync();
+            var userChecked = await _userRepository.GetAllIncludeDetailAsync();
 
             if(userChecked is null)
             {

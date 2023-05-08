@@ -3,17 +3,18 @@ import {useNavigate} from 'react-router-dom';
 
 interface Props {
     name:string,
+    englishName:string,
     imageSrc:string,
     imageAlt?:string,
     href:string,
     description:string
 }
 
-const AnimalPost:FC<Props> = ({name, imageSrc, imageAlt, href, description}) => {
+const AnimalPost:FC<Props> = ({name, englishName,imageSrc, imageAlt, href, description}) => {
     const navigate = useNavigate();
 
     function redirect() {
-        return navigate(`/animals/${name}`);
+        return navigate(`/animals/${englishName}`);
     }
 
     return (
