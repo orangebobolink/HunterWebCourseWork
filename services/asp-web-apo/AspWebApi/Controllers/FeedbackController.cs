@@ -22,5 +22,13 @@ namespace AspWebApi.Controllers
 
             return Ok(feedbacks);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<FeedbackDTO>> CreateFeedback(FeedbackDTO request)
+        {
+            var feedbacks = await _feedbackService.AddAsync(request);
+
+            return Ok(feedbacks);
+        }
     }
 }

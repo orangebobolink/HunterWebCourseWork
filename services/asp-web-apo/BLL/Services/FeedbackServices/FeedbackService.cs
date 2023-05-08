@@ -4,6 +4,7 @@ using BLL.Exceptions;
 using DAL.Entities;
 using DAL.Repositories.FeedbackRepository;
 using DAL.Repositories.OrderRepository;
+using DAL.Repositories.UserRepository;
 using Microsoft.Extensions.Logging;
 
 namespace BLL.Services.FeedbackServices
@@ -11,19 +12,33 @@ namespace BLL.Services.FeedbackServices
     internal class FeedbackService : IFeedbackService
     {
         private readonly IFeedbackRepository _feedbackRepository;
+        private readonly IUserRepository _userRepository;
         private IMapper _mapper;
         private ILogger<FeedbackService> _logger;
 
-        public FeedbackService(IFeedbackRepository feedbackRepository, IMapper mapper, ILogger<FeedbackService> logger)
+        public FeedbackService(IFeedbackRepository feedbackRepository, IUserRepository userRepository, IMapper mapper, ILogger<FeedbackService> logger)
         {
             _feedbackRepository = feedbackRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<FeedbackDTO> AddAsync(FeedbackDTO item)
         {
+            var user = await _userRepository.GetByEmailAsync(item.UserEmail);
+
+            if(user is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("");
+            }
+
             var mapperModel = _mapper.Map<Feedback>(item);
+
+            mapperModel.UserId = user!.Id;
+            mapperModel.User = null;
 
             _feedbackRepository.Add(mapperModel);
             await _feedbackRepository.SaveChangesAsync();
