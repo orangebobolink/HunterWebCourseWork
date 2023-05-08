@@ -8,10 +8,11 @@ const AnimalCreatePage = () => {
     const [name, setName] = useState("")
     const [imageUrl, serImageUrl] = useState("")
     const [description, setDescription] = useState("")
+    const [englishName, setEnglishName] = useState("")
     const navigate = useNavigate()
 
     const fetch = async () => {
-        await AnimalService.createAnimal(name, description, imageUrl)
+        await AnimalService.createAnimal(name,englishName, description, imageUrl )
     }
     const handly = () => {
         navigate("/")

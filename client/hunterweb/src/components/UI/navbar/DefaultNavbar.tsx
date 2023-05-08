@@ -4,7 +4,7 @@ import logo from "../../../images/logo.jpg"
 import {observer} from 'mobx-react-lite';
 import {Context} from '../../../index';
 import LinkButton from '../button/LinkButton/LinkButton';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const DefaultNavbar = () => {
     const {store} = useContext(Context);
@@ -43,10 +43,14 @@ const DefaultNavbar = () => {
                         </span>
                      </Dropdown.Header>
                      <Dropdown.Item>
-                         Информация
+                         <Link to="/information">
+                            Информация
+                         </Link>
                      </Dropdown.Item>
                      <Dropdown.Item>
-                         Настройки
+                         <Link to="/setting">
+                            Настройки
+                         </Link>
                      </Dropdown.Item>
                      <Dropdown.Divider />
                      <Dropdown.Item onClick={()=>{
@@ -68,19 +72,41 @@ const DefaultNavbar = () => {
                     href="/"
                     active={true}
                 >
-                    Главная
+                    <Link to="/">Главная</Link>
                 </Navbar.Link>
-                <Navbar.Link href="/animals">
-                    Трофеи
+                <Navbar.Link>
+                    <Link to="/animals">Трофеи</Link>
                 </Navbar.Link>
-                <Navbar.Link href="/order">
-                    Оформить заказ
+                {
+                    store.user.roles.includes("user")
+                    &&
+                        <Navbar.Link>
+                            <Link to="/order">Оформить заказ</Link>
+                        </Navbar.Link>
+
+                }
+
+                {
+                    store.user.roles.includes("moderator")
+                    &&
+                    <Navbar.Link>
+                        <Link to="/manageorder"> Управление заказами</Link>
+                    </Navbar.Link>
+
+                }
+
+                {
+                    store.user.roles.includes("admin")
+                    &&
+                    <Navbar.Link >
+                        <Link to="/manageuser">Управление пользователями</Link>
+                    </Navbar.Link>
+                }
+                <Navbar.Link>
+                    <Link to="/manageuser">Отзывы</Link>
                 </Navbar.Link>
-                <Navbar.Link href="/feedback">
-                    Отзывы
-                </Navbar.Link>
-                <Navbar.Link href="/contacts">
-                    Контакты
+                <Navbar.Link >
+                    <Link to="/contacts">Контакты</Link>
                 </Navbar.Link>
             </Navbar.Collapse>
         </Navbar>
