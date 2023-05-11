@@ -2,6 +2,7 @@
 using BLL.DTOs.UserDTOs;
 using BLL.Exceptions;
 using DAL.Entities.UserEntities;
+using DAL.Repositories.FeedbackRepository;
 using DAL.Repositories.UserRepository;
 using Microsoft.Extensions.Logging;
 
@@ -104,9 +105,26 @@ namespace BLL.Services.UserServices
             throw new System.NotImplementedException();
         }
 
-        public Task<UserDetailDTO> UpdateAsync(UserDetailDTO item)
+        public async Task<UserDetailDTO> UpdateAsync(UserDetailDTO item)
         {
-            throw new System.NotImplementedException();
+            var userChecked = await _userRepository.GetByEmailAsync(item.Email);
+
+            if(userChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("There is not data yet");
+            }
+
+            userChecked.UserDetail!.Phone = item.Phone;
+            userChecked.UserDetail!.FirstName = item.FirstName;
+            userChecked.Roles = null;
+            userChecked.UserDetail.Messanger = null;
+
+            _userRepository.Update(userChecked);
+            await _userRepository.SaveChangesAsync();
+
+            return item;
         }
     }
 }

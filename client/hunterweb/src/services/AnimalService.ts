@@ -12,7 +12,15 @@ export default class AnimalService {
         return $api.get(`Animal`) as Promise<AxiosResponse<IAnimalDetail[]>>;
     }
 
-    static async createAnimal(name:string, englishName:string, description:string, imageUrl:string): Promise<AxiosResponse<void>> {
-        return $api.post(`Animal`, {name,englishName, description, imageUrl}) as Promise<AxiosResponse<void>>;
+    static async createAnimal(animal:IAnimalDetail): Promise<AxiosResponse<void>> {
+        return $api.post(`Animal`, animal) as Promise<AxiosResponse<void>>;
+    }
+
+    static async deleteAnimal(name:string): Promise<AxiosResponse<void>> {
+        return $api.delete(`Animal`, {params:{name:name}}) as Promise<AxiosResponse<void>>;
+    }
+
+    static async updateAnimal(animal:IAnimalDetail): Promise<AxiosResponse<void>> {
+        return $api.put(`Animal`, animal) as Promise<AxiosResponse<void>>;
     }
 }

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import AnimalService from '../../../services/AnimalService';
 import {IAnimalDetail} from '../../../models/IAnimalDetail';
 import {Button, Checkbox, Label, Modal, Spinner, Table, TextInput} from 'flowbite-react';
@@ -7,10 +7,12 @@ import {Context} from '../../../index';
 import ModalHuntingSeason from '../Modal/ModalHuntingSeason/ModalHuntingSeason';
 import {IHuntingSeason} from '../../../models/IHuntingSeason';
 import ModalUpdateAnimal from '../Modal/ModalUpdateAnimal/ModalUpdateAnimal';
+import HuntingSeasonService from '../../../services/HuntingSeasonService';
 
 const AnimalDetail = () => {
-    const {name} = useParams() as any
+    const {name} = useParams();
     const [animal, setAnimal] = useState<IAnimalDetail>({
+        id:0,
         name:'',
         imageUrl:'horn.jpg',
         description: '',
@@ -26,30 +28,38 @@ const AnimalDetail = () => {
     const [dateStart, setDateStart] = useState<Date>(new Date())
     const [dateEnd, setDateEnd] = useState<Date>(new Date())
     const [description, setDescription] = useState("")
+    const [selectId, setSelectId] = useState<number>(0)
+    const navigate = useNavigate()
 
     const onClickCreate = () => {
         setDateStart(new Date())
         setDateEnd(new Date())
         setDescription("")
         setIsCreate(true)
-        setShowModal(!showModal);
+        setShowModal(true);
     };
 
     const onClickShowAnimalModal = () => {
-        setShowAnimalModal(!showAnimalModal);
+        setShowAnimalModal(true);
     };
 
 
     const onClickUpdate = (season:IHuntingSeason) => {
+        setSelectId(season.id)
         setDateStart(season.dateStart)
         setDateEnd(season.dateEnd)
         setDescription(season.description)
         setIsCreate(false)
-        setShowModal(!showModal);
+        setShowModal(true);
     };
 
-    const onClickDelete = () => {
+    const onClickAnimalDelete = async () => {
+        await AnimalService.deleteAnimal(animal.name)
+        navigate("/animals")
+    }
 
+    const onClickDelete = async (id:number) => {
+        await HuntingSeasonService.deleteSeason(id)
     };
 
     const onClose = () => {
@@ -61,7 +71,7 @@ const AnimalDetail = () => {
     };
 
     const fetch = async ()=> {
-        const response = await AnimalService.getByName(name.toString())
+        const response = await AnimalService.getByName(name!)
         console.log(response.data)
         setIsLoading(false)
         setAnimal(response.data)
@@ -119,7 +129,7 @@ const AnimalDetail = () => {
                                 {
                                     store.user.roles.includes("admin") &&
                                     <Table.Cell >
-                                       <Button size="xs" onClick={onClickDelete} className="mb-1 w-20">Удалить</Button>
+                                       <Button size="xs" onClick={e => onClickDelete(season.id)} className="mb-1 w-20">Удалить</Button>
                                         <Button size="xs" onClick={e=>onClickUpdate(season)} className="w-20">Обновить</Button>
                                     </Table.Cell>
                                 }
@@ -133,11 +143,12 @@ const AnimalDetail = () => {
                     <div>
                         <Button onClick={onClickCreate} size="xs" className="mt-3 w-20 self-center">Добавить сезон</Button>
                         <Button onClick={onClickShowAnimalModal} size="xs" className="mt-5 w-20 self-center">Обновить животное</Button>
+                        <Button onClick={onClickAnimalDelete} size="xs" className="mt-5 w-20 self-center">Удалить</Button>
                     </div>
                 }
 
                 <ModalHuntingSeason showModal={showModal} onClose={onClose} isCreate={isCreate} dateS={dateStart}
-                dateE={dateEnd} descript={description}/>
+                dateE={dateEnd} descript={description} id={selectId} animalId={animal.id!}/>
 
                 <ModalUpdateAnimal showModal={showAnimalModal} onClose={onCloseAnimalModal} animal={animal}/>
              </div>

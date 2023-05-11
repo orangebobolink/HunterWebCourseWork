@@ -20,6 +20,8 @@ namespace DAL.Repositories.OrderRepository
         public async override Task<IEnumerable<Order>> GetAllAsync()
             => await _dbContext.Orders
                 .Include(o => o.User)
+                .Include(o => o.User!.UserDetail)
+                .Include(o => o.User!.UserDetail!.Messanger)
                 .Include(o => o.Status)
                 .AsNoTracking()
                 .ToListAsync();

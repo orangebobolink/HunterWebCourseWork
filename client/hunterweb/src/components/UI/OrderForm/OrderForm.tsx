@@ -12,23 +12,32 @@ const OrderForm = () => {
     const [countDates, setCountDates] = useState(1)
     const [includeHouse, setIncludeHouse] = useState(false)
     const [additionalInfo, setAdditionalInfo] = useState("")
+    const [animalInfo, setAnimalInfo] = useState("")
 
     return (
         <form className="container mx-auto w-1/3 flex flex-col gap-4 max-w-7xl"
               onSubmit={
                   ()=> {
                       const order:IOrder = {
+                          id:0,
                           userEmail:store.user.email,
                           numberHunters:numberHunters,
                           countDates:countDates,
                           includeHouse:includeHouse,
-                          additionalInfo:additionalInfo
+                          additionalInfo:additionalInfo,
+                          animalInfo:animalInfo
                       }
                       debugger
                       OrderService.create(order);
                   }
               }
         >
+
+            <InputField id="email1" type="text" required={true} labelValue="Животные"
+                        onChange={(e: any) => setAnimalInfo(e.target.value)}
+                        value={animalInfo}
+            />
+
             <InputField id="email1" type="number" required={true} labelValue="Количество охотников"
                         onChange={(e: any) => setNumberHunters(e.target.value)}
                         value={numberHunters}

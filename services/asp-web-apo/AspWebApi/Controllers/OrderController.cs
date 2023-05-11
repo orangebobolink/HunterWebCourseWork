@@ -31,5 +31,21 @@ namespace AspWebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ResponseUserDto>> GetById(int id)
+        {
+            var response = await _orderService.GetByIdAsync(id);
+
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ResponseUserDto>> ChangeStatus(OrderDTO order)
+        {
+            var response = await _orderService.ChangeStatus(order);
+
+            return Ok(response);
+        }
     }
 }

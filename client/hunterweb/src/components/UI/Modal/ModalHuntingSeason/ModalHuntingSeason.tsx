@@ -1,6 +1,8 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {Button, Label, Modal, Textarea} from 'flowbite-react';
 import InputField from '../../InputField/InputField';
+import HuntingSeasonService from '../../../../services/HuntingSeasonService';
+import {IHuntingSeason} from '../../../../models/IHuntingSeason';
 
 interface Props{
     showModal:boolean,
@@ -9,23 +11,27 @@ interface Props{
     dateS: Date,
     dateE: Date,
     descript:string,
+    id:number,
+    animalId:number
 }
 
-const ModalHuntingSeason:FC<Props> = ({showModal,onClose, isCreate, dateS,dateE,descript}) => {
-    const [dateStart, setDateStart] = useState<Date>(new Date())
-    const [dateEnd, setDateEnd] = useState<Date>(new Date())
-    const [description, setDescription] = useState("")
+const ModalHuntingSeason:FC<Props> = ({showModal,onClose, isCreate, id, dateS,dateE,descript,animalId}) => {
+    const [dateStart, setDateStart] = useState<Date>(dateS)
+    const [dateEnd, setDateEnd] = useState<Date>(dateE)
+    const [description, setDescription] = useState(descript)
 
-    const fetch = () => {
-        debugger
-        setDateStart(new Date(dateS))
-        setDateEnd(new Date(dateE))
-        setDescription(descript)
-    }
+   // const fetch = () => {
+    //    debugger
+    //    setDateStart(new Date(dateS))
+    //    setDateEnd(new Date(dateE))
+    //    setDescription(descript)
+    //}
 
-    useMemo(() => {
-        fetch()
-    }, [dateS,dateE,descript, isCreate]);
+
+
+   // useMemo(() => {
+   //     fetch()
+    //}, [dateS,dateE,descript, isCreate]);
 
     return (
         <Modal show={showModal} size="md" popup={true} onClose={() => {
@@ -34,7 +40,21 @@ const ModalHuntingSeason:FC<Props> = ({showModal,onClose, isCreate, dateS,dateE,
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-                     <form>
+                     <form onSubmit={async () => {
+                         const season : IHuntingSeason = {
+                             id:id,
+                             dateStart:dateStart,
+                             dateEnd:dateEnd,
+                             description:description,
+                             animalId:animalId
+                         }
+
+                         if(isCreate) {
+                             await HuntingSeasonService.create(season)
+                         } else {
+                             await HuntingSeasonService.update(season)
+                         }
+                     }}>
 
                         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
                             {isCreate?
@@ -48,6 +68,7 @@ const ModalHuntingSeason:FC<Props> = ({showModal,onClose, isCreate, dateS,dateE,
                                     labelValue="Дата начало"
                                     value={dateStart}
                                     onChange={(e: any) => setDateStart(e.target.value)}/>
+
                         <InputField id="dateEnd" type="date" required={true} labelValue="Дата окончания"
                                     value={dateEnd}
                                     onChange={(e: any) => setDateEnd(e.target.value)}/>

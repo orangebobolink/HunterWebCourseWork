@@ -4,7 +4,7 @@ import DefaultInput from '../input/DefaultInput';
 
 interface Props {
     onChange?:(e: any) => void,
-    value?:string | number | boolean | Date | null,
+    value?:string | number | boolean | Date | null | File,
     id:string,
     type:string,
     placeholder?:string,
@@ -12,7 +12,9 @@ interface Props {
     labelValue:string,
     min?:number,
     max?:number,
-    readonly?:boolean
+    readonly?:boolean,
+    pattern?:string,
+    title?:string
 }
 
 const InputField:FC<Props> = ({
@@ -25,7 +27,9 @@ const InputField:FC<Props> = ({
                                 labelValue,
                                 min,
                                 max,
-                                  readonly
+                                  readonly,
+                                pattern,
+                                title
                               }) => {
     return (
         <div>
@@ -45,6 +49,8 @@ const InputField:FC<Props> = ({
                 min={min}
                 max={max}
                 readOnly={readonly}
+                pattern={pattern}
+                title={title}
             />
         </div>
     );

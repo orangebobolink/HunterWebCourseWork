@@ -8,6 +8,6 @@
         public int? MessangerId { get; set; }
         public Messanger? Messanger { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

@@ -10,10 +10,10 @@ namespace DAL.Repositories.StatusRepository
         {
         }
 
-        public override Task<IEnumerable<Status>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public override async Task<IEnumerable<Status>> GetAllAsync()
+             => await _dbContext.Statuses
+                .AsNoTracking()
+                .ToListAsync();
 
         public override Task<Status?> GetByIdAsync(int id)
         {

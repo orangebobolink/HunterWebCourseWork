@@ -92,21 +92,18 @@ namespace BLL.Services.HuntingSeasonServices
 
             _huntingSeasonRepository.Remove(huntingSeasonChecked);
 
+            await _huntingSeasonRepository.SaveChangesAsync();
+
             return item;
         }
 
         public async Task<HuntingSeasonDTO> UpdateAsync(HuntingSeasonDTO item)
         {
-            var huntingSeasonChecked = await _huntingSeasonRepository.GetByIdAsync(item.Id);
+            var mapperModel = _mapper.Map<HuntingSeason>(item);
 
-            if(huntingSeasonChecked is null)
-            {
-                _logger.LogError("");
+            _huntingSeasonRepository.Update(mapperModel);
 
-                throw new NotFoundException("There is not data yet");
-            }
-
-            _huntingSeasonRepository.Update(huntingSeasonChecked);
+            await _huntingSeasonRepository.SaveChangesAsync();
 
             return item;
         }

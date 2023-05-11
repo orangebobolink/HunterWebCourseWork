@@ -3,17 +3,15 @@ import {Dropdown} from 'flowbite-react';
 import InformationUserRow from '../table/InformationUserTable/InformationUser.Row';
 import RolesDropdownItem from './RolesDropdown.Item';
 import {debug} from 'util';
+import {IUserDetail} from '../../../models/IUserDetail';
 
 interface Props {
-    roles : string[],
-    email:string
+    user:IUserDetail,
+    onClickAddRole:(user:IUserDetail) => (void)
 }
 
-const RolesDropdown :FC<Props> = ({roles, email}) => {
+const RolesDropdown :FC<Props> = ({user, onClickAddRole}) => {
 
-    const onClick = () => {
-
-    }
 
     return (
         <Dropdown
@@ -22,13 +20,13 @@ const RolesDropdown :FC<Props> = ({roles, email}) => {
             size="lg"
         >
             {
-                roles.map((role) =>
-                    <RolesDropdownItem role={role} email={email}/>
+                user.roles.map((role) =>
+                    <RolesDropdownItem role={role} user={user}/>
                 )
             }
             <Dropdown.Item>
                 <button
-                    onClick={e => onClick()}
+                    onClick={e => onClickAddRole(user)}
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >
                     Добавить
