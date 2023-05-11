@@ -5,13 +5,14 @@ import {IUserDetail} from '../../../../models/IUserDetail';
 import RolesDropdown from '../../Dropdown/RolesDropdown';
 
 interface Props{
-    user:IUserDetail
+    user:IUserDetail,
+    onClickAddRole:(user:IUserDetail) => (void)
 }
 
-const InformationUserRow:FC<Props> = ({user}) => {
+const InformationUserRow:FC<Props> = ({user, onClickAddRole}) => {
 
     const onClick = (email:string) => {
-
+// TODO удаление юзера
     }
 
     return (
@@ -29,7 +30,7 @@ const InformationUserRow:FC<Props> = ({user}) => {
                 {user.messangerName}
             </Table.Cell>
             <Table.Cell>
-                <RolesDropdown roles={user.roles} email={user.email}   />
+                <RolesDropdown user={user} onClickAddRole={onClickAddRole} />
             </Table.Cell>
             <Table.Cell>
                 <button

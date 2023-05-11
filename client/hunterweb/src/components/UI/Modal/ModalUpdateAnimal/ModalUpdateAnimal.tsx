@@ -1,7 +1,8 @@
-import React, {FC, useState} from 'react';
-import {Button, Label, Modal, Textarea} from 'flowbite-react';
+import React, {FC, useRef, useState} from 'react';
+import {Button, FileInput, Label, Modal, Textarea} from 'flowbite-react';
 import InputField from '../../InputField/InputField';
 import {IAnimalDetail} from '../../../../models/IAnimalDetail';
+import AnimalService from '../../../../services/AnimalService';
 
 interface Props{
     showModal:boolean,
@@ -10,9 +11,9 @@ interface Props{
 }
 
 const ModalUpdateAnimal : FC<Props> = ({showModal, onClose, animal}) => {
-
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const [name, setName] = useState(animal.name)
-    const [imageUrl, setImageUrl] = useState("")
+    const imageUrl = useRef<HTMLInputElement>(null)
     const [description, setDescription] = useState(animal.description)
 
     return (
@@ -22,20 +23,25 @@ const ModalUpdateAnimal : FC<Props> = ({showModal, onClose, animal}) => {
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-                    <form>
+                    <form onSubmit={async ()=> {
+                        //const url = imageUrl.current?.files?.[0].name
+
+                        //animal.imageUrl = url
+                        animal.description = textAreaRef.current?.value!
+                        debugger
+                        await AnimalService.updateAnimal(animal)
+                        onClose()
+
+                    }}>
 
                         <h3 className="text-xl font-medium text-gray-900 dark:text-white">
                              <p>Обновите трофей</p>
                         </h3>
-                        <InputField id="dateStart"
-                                    type="text"
-                                    required={true}
-                                    labelValue="Имя"
-                                    value={name}
-                                    onChange={(e: any) => setName(e.target.value)}/>
-                        <InputField id="dateEnd" type="file" required={true} labelValue="Изображение"
-                                    value={imageUrl}
-                                    onChange={(e: any) => setImageUrl(e.target.value)}/>
+
+                        <FileInput id="dateEnd" required={false}
+                                    ref={imageUrl}
+                                    placeholder="Файл не выбран"
+                                    />
                         <div id="textarea">
                             <div className="mb-2 block">
                                 <Label
@@ -48,8 +54,7 @@ const ModalUpdateAnimal : FC<Props> = ({showModal, onClose, animal}) => {
                                 placeholder="Leave a comment..."
                                 required={true}
                                 rows={4}
-                                value={description}
-                                onChange={(e: any) => setDescription(e.target.value)}
+                                ref={textAreaRef}
                             />
                         </div>
                         <div className="w-full mt-3">

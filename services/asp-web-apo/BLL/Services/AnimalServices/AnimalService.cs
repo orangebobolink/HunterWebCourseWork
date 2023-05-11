@@ -27,7 +27,7 @@ namespace BLL.Services.AnimalServices
         {
             // TODO: по getbyname методы, типы и тд подсоеденять 
 
-            var animalChecked = _animalRepository.GetByNameAsync(item.Name);
+            var animalChecked = await _animalRepository.GetByNameAsync(item.Name);
 
             if(animalChecked is not null)
             {
@@ -112,9 +112,16 @@ namespace BLL.Services.AnimalServices
 
         public async Task<AnimalDetailDTO> RemoveAsync(AnimalDetailDTO item)
         {
-            var mapperModel = _mapper.Map<Animal>(item);
+            var animalChecked = await _animalRepository.GetByNameAsync(item.Name);
 
-            _animalRepository.Remove(mapperModel);
+            if(animalChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("");
+            }
+
+            _animalRepository.Remove(animalChecked);
             await _animalRepository.SaveChangesAsync();
 
             return item;
@@ -123,6 +130,9 @@ namespace BLL.Services.AnimalServices
         public async Task<AnimalDetailDTO> UpdateAsync(AnimalDetailDTO item)
         {
             var mapperModel = _mapper.Map<Animal>(item);
+
+            mapperModel.ImageUrl = item.ImageUrl;
+            mapperModel.AnimalDetail!.Description = item.Description;
 
             _animalRepository.Update(mapperModel);
             await _animalRepository.SaveChangesAsync();

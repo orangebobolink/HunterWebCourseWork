@@ -10,6 +10,7 @@ namespace BLL.Mappings
         {
             CreateMap<Order, OrderDTO>()
                  .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status!.Name))
+                 .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email))
                 .ReverseMap();
         }
     }

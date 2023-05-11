@@ -54,6 +54,28 @@ namespace BLL.Services.OrderService
             return item;
         }
 
+        public async Task<OrderDTO> ChangeStatus(OrderDTO order)
+        {
+            var orderChecked = await _orderRepository.GetByIdAsync(order.Id);
+
+            if(orderChecked is null)
+            {
+                _logger.LogError("");
+
+                throw new NotFoundException("There is not data yet");
+            }
+
+            var status = await _statusRepository.GetByNameAsync(order.StatusName);
+
+            orderChecked.StatusId = status!.Id;
+            orderChecked.Status = null;
+
+            _orderRepository.Update(orderChecked);
+            await _orderRepository.SaveChangesAsync();
+
+            return order;
+        }
+
         public async Task<IEnumerable<OrderDTO>> GetAllAsync()
         {
             var orderChecked = await _orderRepository.GetAllAsync();

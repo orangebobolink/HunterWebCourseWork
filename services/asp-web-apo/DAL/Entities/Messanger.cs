@@ -7,6 +7,5 @@ namespace DAL.Entities
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public List<UserDetail> UserDetails { get; set; } = new();
-        public List<Order> Orders { get; set; } = new();
     }
 }

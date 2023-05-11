@@ -103,7 +103,7 @@ const DefaultNavbar = () => {
                     </Navbar.Link>
                 }
                 <Navbar.Link>
-                    <Link to="/manageuser">Отзывы</Link>
+                    <Link to="/feedback">Отзывы</Link>
                 </Navbar.Link>
                 <Navbar.Link >
                     <Link to="/contacts">Контакты</Link>

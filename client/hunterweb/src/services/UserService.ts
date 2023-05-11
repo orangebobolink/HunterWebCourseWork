@@ -8,10 +8,15 @@ export default class UserService {
     }
 
     static async getByEmail(email:string): Promise<AxiosResponse<IUserDetail>> {
-        return $api.get(`User/email`, {params: {name:email}}) as Promise<AxiosResponse<IUserDetail>>;
+        return $api.get(`User/email`, {params:{email:email}}) as Promise<AxiosResponse<IUserDetail>>;
     }
+
 
     static async update( user:IUserDetail): Promise<AxiosResponse<IUserDetail>> {
         return $api.put(`User`, user) as Promise<AxiosResponse<IUserDetail>>;
+    }
+
+    static async updateRole( user:IUserDetail): Promise<AxiosResponse<IUserDetail>> {
+        return $api.put(`User/role`, user) as Promise<AxiosResponse<IUserDetail>>;
     }
 }

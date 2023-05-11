@@ -41,6 +41,8 @@ namespace DAL.Repositories.UserRepository
         public async Task<User?> GetByEmailAsync(string email)
                 => await _dbContext.Users
                 .Include(u => u.Roles)
+                .Include(u => u.UserDetail)
+                .Include(u => u.UserDetail!.Messanger)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
     }

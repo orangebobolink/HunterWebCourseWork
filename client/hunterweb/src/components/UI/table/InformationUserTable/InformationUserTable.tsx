@@ -1,13 +1,33 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Table} from 'flowbite-react';
 import InformationUserRow from './InformationUser.Row';
 import {IUserDetail} from '../../../../models/IUserDetail';
+import ModalUserRole from '../../Modal/ModalUserRoles/ModalUserRoles';
 
 interface Props {
     users:IUserDetail[]
 }
 
 const InformationUserTable : FC<Props> = ({users}) => {
+
+    const [showModal,setShowModal] = useState(false)
+    const [selectUser,setSelectUser] = useState<IUserDetail>({
+        firstName:"",
+        messangerName:"",
+        roles:[""],
+        phone:"",
+        email:""
+    })
+
+    const onClose = () => {
+        setShowModal(false)
+    }
+
+    const onClickAddRole = (user:IUserDetail) => {
+        setSelectUser(user)
+        setShowModal(true)
+    }
+
     return (
         <Table hoverable={true}>
             <Table.Head>
@@ -35,10 +55,10 @@ const InformationUserTable : FC<Props> = ({users}) => {
             <Table.Body className="divide-y">
                 {
                     users.map((user)=>
-                        <InformationUserRow user={user}/>
-
+                        <InformationUserRow user={user} onClickAddRole={onClickAddRole}/>
                     )
                 }
+                <ModalUserRole showModal={showModal} onClose={onClose} user={selectUser}/>
             </Table.Body>
         </Table>
     );

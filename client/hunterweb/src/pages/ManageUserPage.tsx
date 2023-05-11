@@ -4,6 +4,7 @@ import InformationUserRow from '../components/UI/table/InformationUserTable/Info
 import {IUserDetail} from '../models/IUserDetail';
 import UserService from '../services/UserService';
 import InformationUserTable from '../components/UI/table/InformationUserTable/InformationUserTable';
+import ModalUserRole from '../components/UI/Modal/ModalUserRoles/ModalUserRoles';
 
 const ManageUserPage = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -15,10 +16,11 @@ const ManageUserPage = () => {
         messangerName:""
     }])
 
+
     const fetchData = async () => {
         const response = await UserService.getAll()
         setUsers(response.data)
-        setIsLoading(true)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -31,10 +33,14 @@ const ManageUserPage = () => {
         {
             !isLoading
             ?
-            <InformationUserTable users={users}/>
+            <div>
+                <InformationUserTable users={users}/>
+
+            </div>
             :
             <Spinner/>
         }
+
         </div>
     );
 };

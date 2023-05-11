@@ -24,10 +24,26 @@ namespace AspWebApi.Controllers
             return Ok(users);
         }
 
-        [HttpGet("/email")]
+        [HttpGet("email")]
         public async Task<ActionResult<UserDetailDTO>> GetByEmail(string email)
         {
             var users = await _userService.GetByEmailIncludeDetailsAsync(email);
+
+            return Ok(users);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<UserDetailDTO>> UpdateUser(UserDetailDTO user)
+        {
+            var users = await _userService.UpdateAsync(user);
+
+            return Ok(users);
+        }
+
+        [HttpPut("/role")]
+        public async Task<ActionResult<UserDetailDTO>> UpdateUserRole(UserDetailDTO user)
+        {
+            var users = await _userService.UpdateAsync(user);
 
             return Ok(users);
         }

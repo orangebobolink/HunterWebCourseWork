@@ -11,27 +11,31 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using BLL.Exceptions;
-using Azure.Core;
+using DAL.Repositories.MessangerRepository;
 
 namespace BLL.Services.AuthServices
 {
     internal class AuthService : IAuthService
     {
-        // TODO: вместо репозиториев сделать сервисы
         private IUserRepository _userRepository;
         private IMapper _mapper;
         private ILogger<AuthService> _logger;
         private ITokenService _tokenService;
-        private IRoleRepository _roleRepository; // TODO: поменять на сервер
+        private IRoleRepository _roleRepository;
+        private IMessangerRepository _messangerRepository;
 
-        public AuthService(IUserRepository userService, IRoleRepository roleRepository, IMapper mapper, ILogger<AuthService> logger, ITokenService tokenService)
+        public AuthService(IUserRepository userService,
+            IRoleRepository roleRepository,
+            IMapper mapper, ILogger<AuthService> logger,
+            ITokenService tokenService,
+            IMessangerRepository messangerRepository)
         {
             _roleRepository = roleRepository;
             _userRepository = userService;
             _mapper = mapper;
             _logger = logger;
             _tokenService = tokenService;
+            _messangerRepository = messangerRepository;
         }
 
         public async Task<ResponseUserDto> Login(RequestUserDTO requestUserDTO)
@@ -101,7 +105,6 @@ namespace BLL.Services.AuthServices
 
         public async Task<ResponseUserDto> Register(RegisterUserDTO requestUserDTO)
         {
-            // TODO: добавит проверки для email и пароль
             var userChecked = await _userRepository.GetByEmailAsync(requestUserDTO.Email);
 
             if(userChecked is not null)
@@ -119,8 +122,11 @@ namespace BLL.Services.AuthServices
             mapperModel.PasswordHash = passwordHash;
 
             var defaultRole = await _roleRepository.GetByNameAsync("user");
+            var messanger = await _messangerRepository.GetByNameAsync(requestUserDTO.MessangerName);
 
             mapperModel.RoleUsers.Add(new RoleUser() { RoleId = defaultRole!.Id });
+            mapperModel.UserDetail!.Messanger = null;
+            mapperModel.UserDetail.MessangerId = messanger!.Id;
 
             _userRepository.Add(mapperModel);
             await _userRepository.SaveChangesAsync();

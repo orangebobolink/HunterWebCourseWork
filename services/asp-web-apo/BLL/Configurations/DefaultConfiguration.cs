@@ -5,6 +5,8 @@ using BLL.Services.FeedbackServices;
 using BLL.Services.HuntingSeasonServices;
 using BLL.Services.MessangerServices;
 using BLL.Services.OrderService;
+using BLL.Services.RoleServices;
+using BLL.Services.StatusServices;
 using BLL.Services.TokeService;
 using BLL.Services.UserServices;
 using DAL.Configurations;
@@ -32,6 +34,8 @@ namespace BLL.Configurations
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IFeedbackService, FeedbackService>();
+            service.AddScoped<IStatusService, StatusService>();
+            service.AddScoped<IRoleService, RoleService>();
         }
 
         private static void ConfigurationAutoMapper(this IServiceCollection service)

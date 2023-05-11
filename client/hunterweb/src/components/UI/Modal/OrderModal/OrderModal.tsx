@@ -1,21 +1,16 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {Button, Label, Modal, Textarea} from 'flowbite-react';
-import InputField from '../../InputField/InputField';
-import {IAnimalDetail} from '../../../../models/IAnimalDetail';
 import {IOrderDetail} from '../../../../models/IOrderDetail';
-import AnimalService from '../../../../services/AnimalService';
-import {Context} from '../../../../index';
 import {IUserDetail} from '../../../../models/IUserDetail';
 import UserService from '../../../../services/UserService';
 
 interface Props{
     showModal:boolean,
     onClose:()=>(void),
-    orderId:number,
-    userEmail:string
+    order:IOrderDetail,
 }
 
-const OrderModal : FC<Props> = ({showModal, onClose, orderId, userEmail}) => {
+const OrderModal : FC<Props> = ({showModal, onClose, order}) => {
     const [user, setUser] = useState<IUserDetail>({
         firstName:"",
         phone:"",
@@ -23,10 +18,10 @@ const OrderModal : FC<Props> = ({showModal, onClose, orderId, userEmail}) => {
         messangerName:"",
         email:""
     });
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const fetchData = async () => {
-        // TODO: тут ещё должны заказы детальные поддятгиваться
         const response = await UserService.getByEmail(order.userEmail);
         setUser(response.data)
         setIsLoading(false)
@@ -45,7 +40,7 @@ const OrderModal : FC<Props> = ({showModal, onClose, orderId, userEmail}) => {
             <Modal.Body>
                 <div className="space-y-6">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                        Электронная почта:&nbsp;{userEmail}
+                        Электронная почта:&nbsp;{order.userEmail}
                     </p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                         Номер телефона:&nbsp;{user.phone}
@@ -60,7 +55,9 @@ const OrderModal : FC<Props> = ({showModal, onClose, orderId, userEmail}) => {
                         Количество дней:&nbsp;{order.countDates}
                     </p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                        Включить проживание:&nbsp;{order.includeHouse}
+                        Включить проживание:&nbsp;
+                        {order.includeHouse ?
+                        "Да": "Нет"}
                     </p>
 
                 </div>

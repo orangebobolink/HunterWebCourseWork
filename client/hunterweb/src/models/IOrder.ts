@@ -5,4 +5,5 @@ export interface IOrder {
     countDates:number;
     includeHouse:boolean;
     additionalInfo:string;
+    animalInfo:string;
 }

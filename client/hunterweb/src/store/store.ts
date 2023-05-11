@@ -4,6 +4,8 @@ import AuthService from '../services/AuthService';
 import axios from 'axios';
 import {IAuthRepsponse} from '../models/response/IAuthRepsponse';
 import $api, {API_URL} from '../http';
+import {IUserDetail} from '../models/IUserDetail';
+import {IRegisterUser} from '../models/IRegisterUser';
 
 
 export default class Store {
@@ -60,9 +62,9 @@ export default class Store {
         }
     }
 
-    async registration(email: string, password: string) {
+    async registration(registeruser:IRegisterUser) {
         try {
-            const response = await AuthService.registration(email, password);
+            const response = await AuthService.registration(registeruser);
             console.log(response);
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
@@ -87,7 +89,10 @@ export default class Store {
             const response = await AuthService.logout();
             localStorage.removeItem('token');
             this.setAuth(false);
-            this.setUser({} as IUser);
+            this.setUser({ email:"",
+                roles: [
+                    ""
+                ]} as IUser);
             this.setAdmin(false);
         } catch (e: any) {
             console.log(e.response?.data?.message);

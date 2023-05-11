@@ -38,7 +38,7 @@ const LoginForm: FC = () => {
                             placeholder="name@flowbite.com"
                 />
 
-                <InputField id="password1" type="password1" required={true} labelValue="Пароль"
+                <InputField id="password1" type="password" required={true} labelValue="Пароль"
                             onChange={(e: any) => setPassword(e.target.value)}
                             value={password}
                 />

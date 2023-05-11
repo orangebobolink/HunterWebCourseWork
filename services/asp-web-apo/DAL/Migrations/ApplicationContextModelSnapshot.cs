@@ -196,9 +196,6 @@ namespace DAL.Migrations
                     b.Property<bool>("IncludeHouse")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MessangerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberHunters")
                         .HasColumnType("int");
 
@@ -209,8 +206,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MessangerId");
 
                     b.HasIndex("StatusId");
 
@@ -412,10 +407,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Order", b =>
                 {
-                    b.HasOne("DAL.Entities.Messanger", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("MessangerId");
-
                     b.HasOne("DAL.Entities.Status", "Status")
                         .WithMany("Orders")
                         .HasForeignKey("StatusId")
@@ -483,8 +474,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Messanger", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("UserDetails");
                 });
 
